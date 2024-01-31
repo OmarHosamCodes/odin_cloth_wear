@@ -1,4 +1,4 @@
-import '../library.dart';
+import '/library.dart';
 
 /// A class to represent an item
 class Item extends Equatable {
@@ -144,4 +144,12 @@ class Item extends Equatable {
         sizes,
         tags,
       ];
+}
+
+class ItemNotifer extends StateNotifier<Item> {
+  ItemNotifer(Item state) : super(state);
+
+  void update(Item item) {
+    state = item;
+  }
 }

@@ -1,8 +1,7 @@
 import '/library.dart';
 
-final firestoreProvider = Provider<FirebaseFirestore>((ref) {
-  return FirebaseFirestore.instance;
-});
+final firestoreProvider =
+    Provider<FirebaseFirestore>((ref) => FirebaseFirestore.instance);
 
 final itemsProvider = FutureProvider<List<Item>>((ref) {
   final itemsCollection = ref.watch(firestoreProvider).collection('items');

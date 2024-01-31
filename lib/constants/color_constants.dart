@@ -7,5 +7,5 @@ class ColorConstants {
   static const Color accentColor = Color(0xFFBB8E77);
   static const Color titleTextColor = Color(0xFFf0f0f0);
   static const Color subtitleTextColor = Color(0xFFECEFF1);
-  static const Color priceTextColor = accentColor;
+  static const Color priceTextColor = Color(0xFFf5d300);
 }

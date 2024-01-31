@@ -83,3 +83,32 @@ class OdinImageNetwork extends StatelessWidget {
     );
   }
 }
+
+class OdinImageAsset extends StatelessWidget {
+  const OdinImageAsset({
+    super.key,
+    this.source,
+    this.width,
+    this.height,
+    this.fallbackIcon = EvaIcons.alertTriangleOutline,
+    this.fit,
+  });
+  final String? source;
+  final double? width;
+  final double? height;
+  final IconData? fallbackIcon;
+  final BoxFit? fit;
+  @override
+  Widget build(BuildContext context) {
+    return Image.asset(
+      source!,
+      width: width,
+      height: height,
+      errorBuilder: (context, error, stackTrace) => Icon(
+        fallbackIcon,
+        color: Colors.white,
+      ),
+      fit: fit,
+    );
+  }
+}

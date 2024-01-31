@@ -26,8 +26,10 @@ dependencies:
   crypto: ^3.0.3
   firebase_storage: ^11.6.0
   eva_icons_flutter: ^3.1.0
-  flutter_launcher_icons: ^0.13.1
-  flutter_native_splash: ^2.3.10
+  # flutter_launcher_icons: ^0.13.1
+  # flutter_native_splash: ^2.3.10
+  dotenv: ^4.2.0
+  injectable: ^2.3.2
 
 dev_dependencies:
   flutter_test:
@@ -35,13 +37,18 @@ dev_dependencies:
 
   flutter_lints: ^2.0.0
   build_runner: ^2.4.8
+  animated_native_splash:
+    git:
+      url: https://github.com/OmarHosamCodes/flutter_animated_splash_screen
 
 flutter:
   uses-material-design: true
   assets:
     - assets/font/Rubik.ttf
     - assets/logo/logo.png
-
+    - assets/images/wrapBackground.png
+    - assets/images/wrapBackgroundBright.png
+    - assets/animation/splashAnimation.json
   fonts:
     - family: Rubik
       fonts:
@@ -61,3 +68,8 @@ flutter_native_splash:
   web: true
   web_image_mode: center
   fullscreen: true
+animated_native_splash:
+  # This package generates native code to customize Flutter's splash
+
+  # jsonFile is the only required parameter.This the file use to setup the animation object.
+  jsonFile: assets/animation/splashAnimation.json
