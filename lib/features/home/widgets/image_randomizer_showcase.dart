@@ -1,70 +1,100 @@
-import 'dart:async';
-
 import '/library.dart';
 
-class ImageRandomizerShowcase extends ConsumerStatefulWidget {
+class ImageRandomizerShowcase extends StatelessWidget {
   const ImageRandomizerShowcase({
     super.key,
   });
 
   @override
-  ConsumerState<ImageRandomizerShowcase> createState() =>
-      _ImageRandomizerShowcaseState();
-}
-
-class _ImageRandomizerShowcaseState
-    extends ConsumerState<ImageRandomizerShowcase> {
-  final pageController = PageController();
-
-  ValueNotifier<int> pagesLength = ValueNotifier<int>(1);
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) {
-        Future.delayed(const Duration(seconds: 3), () {});
-        Timer.periodic(
-          const Duration(seconds: 3),
-          (Timer timer) {
-            if ((pageController.page!.toInt() + 1) % pagesLength.value == 0) {
-              pageController.animateToPage(
-                0,
-                duration: Duration(milliseconds: (500 * pagesLength.value)),
-                curve: Curves.easeIn,
-              );
-            } else {
-              pageController.animateToPage(
-                (pageController.page!.toInt() + 1) % pagesLength.value,
-                duration: const Duration(milliseconds: 700),
-                curve: Curves.easeIn,
-              );
-            }
-          },
-        );
-      },
-    );
-  }
-
-  @override
   Widget build(BuildContext context) {
-    // return const OdinImageAsset(
-    //   source: 'assets/images/wrapBackground.png',
-    //   fit: BoxFit.cover,
-    // );
+    final pageController = PageController();
+    ValueNotifier<int> currentPage = ValueNotifier(0);
     return Consumer(
       builder: (_, WidgetRef ref, __) {
         final adminAssetsWatcher = ref.watch(adminAssetsProvider);
         return adminAssetsWatcher.when(
           data: (adminAssets) {
-            pagesLength.value = adminAssets.backgroundImages.length;
-
-            return PageView.builder(
-              controller: pageController,
-              itemCount: adminAssets.backgroundImages.length,
-              itemBuilder: (context, index) => OdinImageNetwork(
-                source: adminAssets.backgroundImages[index],
-                fit: BoxFit.cover,
-              ),
+            return Stack(
+              alignment: Alignment.center,
+              children: [
+                PageView.builder(
+                  scrollBehavior: const ScrollBehavior()
+                      .copyWith(overscroll: false, scrollbars: false),
+                  controller: pageController,
+                  itemCount: adminAssets.backgroundImages.length,
+                  onPageChanged: (index) => currentPage.value = index,
+                  itemBuilder: (context, index) => GestureDetector(
+                    onPanUpdate: (details) {
+                      if (details.delta.dx > 0) {
+                        pageController.previousPage(
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeIn,
+                        );
+                      } else {
+                        pageController.nextPage(
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeIn,
+                        );
+                      }
+                    },
+                    child: OdinImageNetwork(
+                      source: adminAssets.backgroundImages[index],
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: FutureBuilder<bool>(
+                    future: Future.value(context.mounted),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData ||
+                          !snapshot.data! ||
+                          adminAssets.backgroundImages.length == 1 ||
+                          snapshot.connectionState == ConnectionState.waiting) {
+                        return const SizedBox();
+                      }
+                      return Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: List.generate(
+                          adminAssets.backgroundImages.length,
+                          (imagesIndex) {
+                            return GestureDetector(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 5, horizontal: 5),
+                                child: ValueListenableBuilder(
+                                  valueListenable: currentPage,
+                                  builder:
+                                      (context, pageControllerPageWatcher, _) =>
+                                          AnimatedContainer(
+                                    duration: const Duration(milliseconds: 500),
+                                    width: 10,
+                                    height: 10,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: pageControllerPageWatcher ==
+                                              imagesIndex
+                                          ? const Color(0xffF7F7F7)
+                                          : const Color(0xffF7F7F7)
+                                              .withOpacity(0.5),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              onTap: () => pageController.animateToPage(
+                                imagesIndex,
+                                duration: const Duration(milliseconds: 500),
+                                curve: Curves.ease,
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
             );
           },
           loading: () => const Center(

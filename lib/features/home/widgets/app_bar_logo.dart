@@ -13,11 +13,15 @@ class AppBarLogo extends StatelessWidget {
         return adminAssetsWatcher.when(
           data: (adminAssets) {
             return OdinImageNetwork(
+              width: 95,
+              height: 95,
               source: adminAssets.logo,
             );
           },
-          loading: () => const Center(
-            child: CircularProgressIndicator(),
+          loading: () => const OdinShimmer(
+            height: 40,
+            width: 40,
+            type: OdinShimmerType.circle,
           ),
           error: (error, stackTrace) {
             return const Center(

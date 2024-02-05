@@ -1,7 +1,5 @@
-import '/library.dart';
-
 /// A class to represent an item
-class Item extends Equatable {
+class Item {
   /// Creates an [Item]
   const Item({
     required this.id,
@@ -12,6 +10,7 @@ class Item extends Equatable {
     required this.category,
     required this.colors,
     required this.sizes,
+    required this.sizing,
     required this.tags,
     required this.subCategory,
   });
@@ -27,6 +26,7 @@ class Item extends Equatable {
         subCategory: json[subCategoryKey],
         colors: json[colorsKey],
         sizes: json[sizesKey],
+        sizing: json[sizingKey],
         tags: json[tagsKey],
       );
 
@@ -53,6 +53,7 @@ class Item extends Equatable {
       subCategory: subCategory ?? this.subCategory,
       colors: colors ?? this.colors,
       sizes: sizes ?? this.sizes,
+      sizing: sizing,
       tags: tags ?? this.tags,
     );
   }
@@ -84,6 +85,9 @@ class Item extends Equatable {
   /// Sizes Refrence in the database
   static const String sizesKey = 'sizes';
 
+  /// Sizing Refrence in the database
+  static const String sizingKey = 'sizing';
+
   /// Tags Refrence in the database
   static const String tagsKey = 'tags';
 
@@ -114,6 +118,8 @@ class Item extends Equatable {
   /// Sizes of the [Item]
   final List<dynamic>? sizes;
 
+  final List<dynamic>? sizing;
+
   /// Tags of the [Item]
   final List<dynamic>? tags;
 
@@ -128,28 +134,7 @@ class Item extends Equatable {
         subCategoryKey: subCategory,
         colorsKey: colors,
         sizesKey: sizes,
+        sizingKey: sizing,
         tagsKey: tags,
       };
-
-  @override
-  List<Object?> get props => [
-        id,
-        name,
-        description,
-        images,
-        price,
-        category,
-        subCategory,
-        colors,
-        sizes,
-        tags,
-      ];
-}
-
-class ItemNotifer extends StateNotifier<Item> {
-  ItemNotifer(Item state) : super(state);
-
-  void update(Item item) {
-    state = item;
-  }
 }

@@ -1,13 +1,28 @@
 import '/library.dart';
 
-final firestoreProvider =
-    Provider<FirebaseFirestore>((ref) => FirebaseFirestore.instance);
+final firestoreProvider = Provider<FirebaseFirestore>(
+  (ref) => FirebaseFirestore.instance,
+);
 
-final itemsProvider = FutureProvider<List<Item>>((ref) {
-  final itemsCollection = ref.watch(firestoreProvider).collection('items');
-  final items = itemsCollection.get().then((snapshot) {
-    return snapshot.docs.map((doc) => Item.fromJson(doc.data())).toList();
-  });
+final itemRepositoryProvider = Provider<ItemRepository>(
+  (ref) => ItemRepository(
+    ref.read(firestoreProvider),
+  ),
+);
 
-  return items;
-});
+final itemProvider = FutureProvider.family<Item?, String?>(
+  (ref, itemId) async {
+    if (itemId == null) {
+      return null;
+    } else {
+      final item = await ref.read(itemRepositoryProvider).getById(itemId);
+      return Future.value(item.$1);
+    }
+  },
+);
+final itemsProvider = FutureProvider<List<Item>>(
+  (ref) async {
+    final items = await ref.read(itemRepositoryProvider).get();
+    return Future.value(items);
+  },
+);

@@ -8,4 +8,7 @@ class ColorConstants {
   static const Color titleTextColor = Color(0xFFf0f0f0);
   static const Color subtitleTextColor = Color(0xFFECEFF1);
   static const Color priceTextColor = Color(0xFFf5d300);
+  static const Color normalTextColor = Color(0xFF0f0f0f);
+  static const Color chipColor = Color(0xE40F0F0F);
+  static const Color dividerColor = Color(0xB8D9DCDE);
 }

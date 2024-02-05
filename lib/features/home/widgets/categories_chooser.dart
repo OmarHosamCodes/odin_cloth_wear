@@ -16,7 +16,7 @@ class CategoriesChooser extends StatelessWidget {
               height: 50,
               width: double.maxFinite,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: List.generate(
                   adminAssets.categories.length,
@@ -25,7 +25,7 @@ class CategoriesChooser extends StatelessWidget {
                     child: OdinChip(
                       label: OdinText(
                         text: adminAssets.categories[index],
-                        type: OdinTextType.subtitle,
+                        type: OdinTextType.title,
                       ),
                     ),
                   ),
@@ -33,8 +33,16 @@ class CategoriesChooser extends StatelessWidget {
               ),
             );
           },
-          loading: () => const Center(
-            child: CircularProgressIndicator(),
+          loading: () => Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: List.generate(
+              2,
+              (index) => const OdinShimmer(
+                height: 40,
+                width: 80,
+              ),
+            ),
           ),
           error: (error, stackTrace) {
             return const Center(
