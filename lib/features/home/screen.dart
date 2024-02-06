@@ -43,10 +43,10 @@ class HomeScreen extends StatelessWidget {
                 crossAxisCount: crossAxisCount(),
                 mainAxisSpacing: 10,
                 crossAxisSpacing: 10,
-                childAspectRatio: 0.65,
+                childAspectRatio: 0.70,
               ),
               delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
+                (_, int index) {
                   return Consumer(
                     builder: (_, WidgetRef ref, __) {
                       final items = ref.watch(itemsProvider);

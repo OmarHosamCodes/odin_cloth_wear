@@ -6,7 +6,8 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  // Hive.initFlutter();
+  await Hive.initFlutter();
+  Hive.registerAdapter(CartItemAdapter());
   runApp(const ProviderScope(child: OdinClothWear()));
 }
 //TODO:

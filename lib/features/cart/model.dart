@@ -29,7 +29,7 @@ class CartItem {
 
   /// Colors of the [CartItem]
   @HiveField(1)
-  final String? color;
+  final int? color;
 
   /// Sizes of the [CartItem]
   @HiveField(2)

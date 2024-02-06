@@ -1,5 +1,3 @@
-import 'package:odin_cloth_wear/features/notFound/screen.dart';
-
 import '/library.dart';
 
 class RoutingController {
@@ -27,18 +25,14 @@ class RoutingController {
         //   return null;
         // },
       ),
-      // GoRoute(
-      //   name: Routes.adminRoot,
-      //   path: Routes().admin,
-      //   builder: (context, state) => const AdminScreen(),
-      // )
 
       //TODO:
 
-      // GoRoute(
-      //   path: '/cart',
-      //   pageBuilder: (context, state) => const CartScreen(),
-      // ),
+      GoRoute(
+        name: Routes.cartRoot,
+        path: Routes.cart,
+        builder: (context, state) => const CartScreen(),
+      ),
       // GoRoute(
       //   path: '/checkout',
       //   pageBuilder: (context, state) => const CheckoutScreen(),

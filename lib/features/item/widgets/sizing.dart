@@ -1,28 +1,32 @@
 import '/library.dart';
 
-class Sizing extends ConsumerWidget {
+class Sizing extends StatelessWidget {
   const Sizing(this.item, {super.key});
   final Item item;
 
   List<DataRow> get getRows {
     final List<DataRow> rows = [];
     for (Map<String, dynamic> sizing in item.sizing!) {
-      sizing.forEach((key, value) {
-        rows.add(DataRow(
-          cells: [
-            DataCell(OdinText(text: key)),
-            DataCell(OdinText(text: value[0])),
-            DataCell(OdinText(text: value[0])),
-            DataCell(OdinText(text: value[0])),
-          ],
-        ));
-      });
+      sizing.forEach(
+        (key, value) {
+          rows.add(
+            DataRow(
+              cells: [
+                DataCell(OdinText(text: key)),
+                DataCell(OdinText(text: value[0])),
+                DataCell(OdinText(text: value[1])),
+                DataCell(OdinText(text: value[2])),
+              ],
+            ),
+          );
+        },
+      );
     }
     return rows;
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     const List<String> columns = ['', 'Length', 'Width', 'Sleeve'];
     return Stack(
       alignment: Alignment.center,
@@ -50,7 +54,7 @@ class Sizing extends ConsumerWidget {
           ),
         ),
         Positioned(
-          top: -15,
+          top: 0,
           left: 0,
           child: Consumer(
             builder: (_, WidgetRef ref, __) {
@@ -58,8 +62,8 @@ class Sizing extends ConsumerWidget {
               return adminAssetsWatcher.when(
                 data: (adminAssets) {
                   return OdinImageNetwork(
-                    width: 95,
-                    height: 95,
+                    width: 60,
+                    height: 60,
                     source: adminAssets.logo,
                   );
                 },

@@ -38,12 +38,14 @@ class OdinImageNetwork extends StatelessWidget {
     this.height,
     this.fallbackIcon = EvaIcons.alertTriangleOutline,
     this.fit,
+    this.color,
   });
   final String? source;
   final double? width;
   final double? height;
   final IconData? fallbackIcon;
   final BoxFit? fit;
+  final Color? color;
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
@@ -62,6 +64,7 @@ class OdinImageNetwork extends StatelessWidget {
       width: width,
       height: height,
       fit: fit,
+      color: color,
     );
   }
 }

@@ -18,7 +18,7 @@ class CartItemAdapter extends TypeAdapter<CartItem> {
     };
     return CartItem(
       id: fields[0] as String?,
-      color: fields[1] as String?,
+      color: fields[1] as int?,
       size: fields[2] as String?,
     );
   }

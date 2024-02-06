@@ -7,21 +7,23 @@ class HomeAdvancedDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     AdvancedDrawerController advancedDrawerController =
         AdvancedDrawerController();
+    advancedDrawerController.value = AdvancedDrawerValue.hidden();
     void handleMenuButtonPressed() {
-      advancedDrawerController.showDrawer();
+      advancedDrawerController.toggleDrawer();
     }
 
     return AdvancedDrawer(
       backdrop: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [ColorConstants.chipColor, ColorConstants.cardColor],
-          ),
-        ),
+        color: ColorConstants.cardColor,
+        // decoration: const BoxDecoration(
+        //   gradient: LinearGradient(
+        //     begin: Alignment.topLeft,
+        //     end: Alignment.bottomRight,
+        //     colors: [ColorConstants.chipColor, ColorConstants.cardColor],
+        //   ),
+        // ),
       ),
       controller: advancedDrawerController,
       animationCurve: Curves.easeInOut,
@@ -122,29 +124,77 @@ class HomeAdvancedDrawer extends StatelessWidget {
                 ),
               ],
             ),
+            ListTile(
+              onTap: () {},
+              leading: const Icon(
+                EvaIcons.flash,
+                color: ColorConstants.priceTextColor,
+              ),
+              title: const OdinText(text: 'Hot Now'),
+            ),
+            SizedBox(
+              height: 100,
+              width: double.infinity,
+              child: Consumer(
+                builder: (_, WidgetRef ref, __) {
+                  final items = ref.watch(itemsProvider);
+                  return items.maybeWhen(
+                    data: (items) {
+                      final controller = ScrollController(
+                        initialScrollOffset: 20,
+                        keepScrollOffset: true,
+                      );
+                      final hotItems = items
+                          .where((item) => item.tags!.contains('hot'))
+                          .toList();
+                      return GestureDetector(
+                        onPanUpdate: (details) {
+                          if (details.delta.dx > 0) {
+                            controller.jumpTo(controller.offset - 5);
+                          } else if (details.delta.dx < 0) {
+                            controller.jumpTo(controller.offset + 5);
+                          }
+                        },
+                        child: ListView.builder(
+                          controller: controller,
+                          shrinkWrap: true,
+                          scrollDirection: Axis.horizontal,
+                          itemCount: hotItems.length,
+                          itemBuilder: (context, index) {
+                            final item = hotItems[index];
+                            return OdinImageNetwork(
+                              source: item.images!.first,
+                              height: 100,
+                              width: 100,
+                              fit: BoxFit.contain,
+                            );
+                          },
+                        ),
+                      );
+                    },
+                    orElse: () => const OdinShimmer(
+                      height: 128,
+                      width: 128,
+                      type: OdinShimmerType.circle,
+                    ),
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),
       child: Scaffold(
         extendBody: true,
-        extendBodyBehindAppBar: true,
+        extendBodyBehindAppBar: false,
         appBar: AppBar(
-          backgroundColor: Colors.transparent,
+          backgroundColor: ColorConstants.cardColor,
           elevation: 0,
           title: const FittedBox(
             fit: BoxFit.contain,
             child: AppBarLogo(),
           ),
           centerTitle: true,
-          actions: [
-            IconButton(
-              icon: const Icon(
-                EvaIcons.search,
-                color: ColorConstants.backgroundColor,
-              ),
-              onPressed: () {},
-            ),
-          ],
           leading: IconButton(
             icon: const Icon(
               EvaIcons.menu2Outline,
@@ -152,6 +202,23 @@ class HomeAdvancedDrawer extends StatelessWidget {
             ),
             onPressed: handleMenuButtonPressed,
           ),
+          actions: [
+            Consumer(
+              builder: (_, WidgetRef ref, __) {
+                return IconButton(
+                  onPressed: () {
+                    ref.invalidate(cartProvider);
+                    ref.read(cartProvider);
+                    context.goNamed(Routes.cartRoot);
+                  },
+                  icon: const Icon(
+                    EvaIcons.shoppingCartOutline,
+                    color: ColorConstants.backgroundColor,
+                  ),
+                );
+              },
+            ),
+          ],
         ),
         body: child,
       ),

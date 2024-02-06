@@ -7,7 +7,7 @@ class CartRepository {
   CartRepository();
 
   /// GET [CartItem]
-  Future<List<CartItem>?> get() async {
+  Future<List<CartItem>> get() async {
     final box = await Hive.openBox<CartItem>('cart');
     final cart = box.values.toList();
     return cart;
@@ -16,7 +16,7 @@ class CartRepository {
   /// ADD [CartItem]
 
   Future<(CartItem?, ResponseStatus)> add(
-      String itemID, String color, String size) async {
+      String itemID, int color, String size) async {
     final box = await Hive.openBox<CartItem>('cart');
     final itemRepository = ItemRepository(FirebaseFirestore.instance);
     final item = (await itemRepository.getById(itemID)).$1; //add null check

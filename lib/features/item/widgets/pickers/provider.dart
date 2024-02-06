@@ -30,6 +30,13 @@ class PickerNotifier<T> extends StateNotifier<PickerState> {
       isSelected: true,
     );
   }
+
+  void reset() {
+    state = state.copyWith(
+      pickedState: null,
+      isSelected: false,
+    );
+  }
 }
 
 final sizePickerProvider =

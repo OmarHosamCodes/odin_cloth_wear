@@ -14,7 +14,6 @@ class ItemScreen extends StatelessWidget {
 
     return Scaffold(
       extendBody: true,
-      extendBodyBehindAppBar: true,
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(
@@ -25,10 +24,21 @@ class ItemScreen extends StatelessWidget {
         ),
         title: const AppBarLogo(),
         centerTitle: true,
-        actions: const [
-          Icon(
-            EvaIcons.shoppingCartOutline,
-            color: ColorConstants.backgroundColor,
+        actions: [
+          Consumer(
+            builder: (_, WidgetRef ref, __) {
+              return IconButton(
+                onPressed: () {
+                  ref.invalidate(cartProvider);
+                  ref.read(cartProvider);
+                  context.goNamed(Routes.cartRoot);
+                },
+                icon: const Icon(
+                  EvaIcons.shoppingCartOutline,
+                  color: ColorConstants.backgroundColor,
+                ),
+              );
+            },
           ),
         ],
       ),

@@ -9,13 +9,24 @@ class AddToCart extends ConsumerWidget {
       onTap: () {
         final size = ref.read(sizePickerProvider).pickedState as String?;
         final color = ref.read(colorPickerProvider).pickedState as int?;
-        // ref.read(cartRepositoryProvider).add(
-        //       item.id!,
-        //       size,
-        //       color,
-        //     );
-        size.toString().log();
-        color.toString().log();
+
+        if (size == null || color == null) {
+          OdinToast.showErrorToast('Please select size and color');
+        } else {
+          try {
+            ref.read(cartRepositoryProvider).add(
+                  item.id!,
+                  color,
+                  size,
+                );
+            OdinToast.showSuccessToast('Item added to cart');
+            ref.read(sizePickerProvider.notifier).reset();
+            ref.read(colorPickerProvider.notifier).reset();
+          } catch (e) {
+            OdinToast.showErrorToast(
+                'Failed to add item to cart. Please try again later.');
+          }
+        }
       },
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 10),
