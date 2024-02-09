@@ -1,8 +1,8 @@
-import 'package:odin_cloth_wear/features/cart/widgets/quick_add_sheet.dart';
+import 'package:odin_cloth_wear/library.dart';
 
-import '/library.dart';
-
+/// A [StatelessWidget] that displays the cart screen.
 class CartScreen extends StatelessWidget {
+  /// A [StatelessWidget] that displays the cart screen.
   const CartScreen({super.key});
 
   @override
@@ -12,7 +12,7 @@ class CartScreen extends StatelessWidget {
         title: const OdinText(
           text: 'Cart',
           type: OdinTextType.custom,
-          textColor: ColorConstants.cardColor,
+          textColor: ColorConstants.seccoundaryColor,
           textSize: 14,
           textWeight: FontWeight.bold,
         ),
@@ -22,69 +22,77 @@ class CartScreen extends StatelessWidget {
           onPressed: () => context.goNamed(Routes.homeRoot),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: CustomScrollView(
-          slivers: [
-            Consumer(
-              builder: (_, WidgetRef ref, __) {
-                final cartWatcher = ref.watch(cartProvider);
+      body: CustomScrollView(
+        slivers: [
+          Consumer(
+            builder: (_, WidgetRef ref, __) {
+              final cartWatcher = ref.watch(cartProvider);
 
-                return cartWatcher.when(
-                  data: (cart) {
-                    if (cart.isEmpty) {
-                      return const SliverToBoxAdapter(
-                        child: Center(
+              return cartWatcher.maybeWhen(
+                data: (cart) {
+                  if (cart.isEmpty) {
+                    return SliverToBoxAdapter(
+                      child: SizedBox.fromSize(
+                        size: const Size(175, 75),
+                        child: const Center(
                           child: OdinText(
                             text: 'Cart is empty',
                             type: OdinTextType.custom,
-                            textColor: ColorConstants.cardColor,
-                            textSize: 14,
+                            textColor: ColorConstants.seccoundaryColor,
+                            textSize: 18,
                             textWeight: FontWeight.bold,
                           ),
                         ),
-                      );
-                    }
-                    return SliverList.separated(
-                      separatorBuilder: (context, index) => const OdinDivider(),
-                      itemCount: cart.length,
-                      itemBuilder: (context, index) {
-                        final cartItem = cart[index];
-                        return CartItemTile(cartItem: cartItem);
-                      },
+                      ),
                     );
-                  },
-                  loading: () => const SliverToBoxAdapter(
-                    child: Center(
+                  }
+                  return SliverList.separated(
+                    separatorBuilder: (context, index) => const OdinDivider(),
+                    itemCount: cart.length,
+                    itemBuilder: (context, index) {
+                      final cartItem = cart[index];
+                      return CartItemTile(cartItem: cartItem);
+                    },
+                  );
+                },
+                orElse: () => SliverToBoxAdapter(
+                  child: SizedBox.fromSize(
+                    size: const Size(175, 75),
+                    child: const Center(
                       child: OdinText(
                         text: 'Cart is empty',
                         type: OdinTextType.custom,
-                        textColor: ColorConstants.cardColor,
-                        textSize: 14,
+                        textColor: ColorConstants.seccoundaryColor,
+                        textSize: 18,
                         textWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-                  error: (error, stackTrace) => const SliverToBoxAdapter(
-                    child: Center(
-                      child: OdinText(
-                        text: 'Cart is empty',
-                        type: OdinTextType.custom,
-                        textColor: ColorConstants.cardColor,
-                        textSize: 14,
-                        textWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                );
-              },
-            ),
-            SliverToBoxAdapter(
+                ),
+              );
+            },
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            sliver: SliverToBoxAdapter(
               child: Consumer(
                 builder: (_, WidgetRef ref, __) {
                   final cartWatcher = ref.watch(cartProvider);
-                  return cartWatcher.when(
+                  return cartWatcher.maybeWhen(
                     data: (cart) {
+                      if (cart.isEmpty) {
+                        return SizedBox.fromSize(
+                          size: const Size(50, 50),
+                          child: const OdinChip(
+                            label: FittedBox(
+                              child: OdinText(
+                                text: 'Continue Shopping',
+                                type: OdinTextType.subtitle,
+                              ),
+                            ),
+                          ),
+                        );
+                      }
                       return OdinElevatedButton(
                         child: const OdinText(text: 'Checkout'),
                         onPressed: () {
@@ -96,13 +104,15 @@ class CartScreen extends StatelessWidget {
                         },
                       );
                     },
-                    loading: () => const SizedBox(),
-                    error: (error, stackTrace) => const SizedBox(),
+                    orElse: () => const SizedBox(),
                   );
                 },
               ),
             ),
-            Consumer(
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            sliver: Consumer(
               builder: (_, WidgetRef ref, __) {
                 final itemsWatcher = ref.watch(itemsProvider);
 
@@ -123,7 +133,6 @@ class CartScreen extends StatelessWidget {
                         final item = hotItems[index];
                         return Column(
                           mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             AspectRatio(
                               aspectRatio: 4 / 5,
@@ -133,22 +142,24 @@ class CartScreen extends StatelessWidget {
                                     BoxShadow(
                                       color: Colors.black.withOpacity(0.2),
                                       blurRadius: 5,
-                                      spreadRadius: 0,
                                       offset: const Offset(0, 3),
                                     ),
                                   ],
                                 ),
                                 child: Card(
                                   clipBehavior: Clip.antiAlias,
-                                  color: ColorConstants.cardColor,
+                                  color: ColorConstants.primaryColor,
                                   child: ImageViewer(item: item),
                                 ),
                               ),
                             ),
                             const SizedBox(height: 8),
                             OdinElevatedButton(
-                              onPressed: () => openQuickAddSheet(context,
-                                  item: item, ref: ref),
+                              onPressed: () => openQuickAddSheet(
+                                context,
+                                item: item,
+                                ref: ref,
+                              ),
                               child: const OdinText(text: 'Quick Add'),
                             ),
                           ],
@@ -165,9 +176,9 @@ class CartScreen extends StatelessWidget {
                   ),
                   error: (error, stackTrace) => const SliverToBoxAdapter(
                     child: OdinText(
-                      text: 'Error loading hot items',
+                      text: 'Error loading items',
                       type: OdinTextType.custom,
-                      textColor: ColorConstants.cardColor,
+                      textColor: ColorConstants.primaryColor,
                       textSize: 14,
                       textWeight: FontWeight.bold,
                     ),
@@ -175,8 +186,21 @@ class CartScreen extends StatelessWidget {
                 );
               },
             ),
-          ],
-        ),
+          ),
+          SliverToBoxAdapter(
+            child: Consumer(
+              builder: (_, WidgetRef ref, __) {
+                final adminAssets = ref.watch(adminAssetsProvider);
+                return adminAssets.maybeWhen(
+                  data: (adminAssets) {
+                    return ContactInfo(adminAssets: adminAssets);
+                  },
+                  orElse: () => const SizedBox(),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }

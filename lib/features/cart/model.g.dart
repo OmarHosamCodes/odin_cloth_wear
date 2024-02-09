@@ -6,6 +6,7 @@ part of 'model.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
+/// A class that represents a cart item.
 class CartItemAdapter extends TypeAdapter<CartItem> {
   @override
   final int typeId = 0;

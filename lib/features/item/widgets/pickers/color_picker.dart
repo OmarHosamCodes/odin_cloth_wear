@@ -1,20 +1,27 @@
-import '/library.dart';
+import 'package:odin_cloth_wear/library.dart';
 
+/// A [StatelessWidget] that displays a [ColorPicker].
 class ColorPicker extends StatelessWidget {
-  const ColorPicker({super.key, required this.item});
+  /// A [StatelessWidget] that displays a [ColorPicker].
+  const ColorPicker({required this.item, super.key});
+
+  /// The [Item] to display.
   final Item item;
 
   @override
   Widget build(BuildContext context) {
-    late final List colors = item.colors!.map((e) => int.tryParse(e)).toList();
+    // ignore: inference_failure_on_function_return_type
+    late final colors =
+        // ignore: inference_failure_on_function_invocation
+        item.colors!.map((color) => int.tryParse(color.toString())).toList();
 
     return Consumer(
       builder: (_, WidgetRef ref, __) {
         ref.watch(colorPickerProvider);
-        final selectedColor = ref.read(colorPickerProvider).pickedState;
+        final selectedColor =
+            ref.read(colorPickerProvider).pickedState ?? colors.first;
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: colors.map(
             (color) {
               final isSelected = color == selectedColor;
@@ -30,7 +37,7 @@ class ColorPicker extends StatelessWidget {
                     shape: BoxShape.circle,
                     border: Border.all(
                       color: isSelected
-                          ? Color(selectedColor)
+                          ? Color(selectedColor!)
                           : Colors.transparent,
                       width: 2,
                     ),
@@ -39,7 +46,7 @@ class ColorPicker extends StatelessWidget {
                     width: 25,
                     height: 25,
                     decoration: BoxDecoration(
-                      color: Color(color),
+                      color: Color(color!),
                       shape: BoxShape.circle,
                     ),
                   ),

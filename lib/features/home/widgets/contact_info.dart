@@ -1,25 +1,29 @@
-import 'package:odin_cloth_wear/features/home/provider.dart';
+// ignore_for_file: avoid_dynamic_calls
 
-import '/library.dart';
+import 'package:odin_cloth_wear/library.dart';
 
+/// A [StatelessWidget] that displays the contact info of the admin.
 class ContactInfo extends StatelessWidget {
-  const ContactInfo({super.key, required this.adminAssets});
+  /// A [StatelessWidget] that displays the contact info of the admin.
+  const ContactInfo({required this.adminAssets, super.key});
+
+  /// The [AdminAssets] to display.
   final AdminAssets adminAssets;
 
   List<Widget> get _socials {
-    List<Widget> socials = [];
+    final socials = <Widget>[];
 
     adminAssets.social.forEach(
       (key, value) {
         socials.add(
           InkWell(
-            onTap: () => launchURL(value[1]),
+            onTap: () => launchURL(value[1] as String),
             child: OdinImageNetwork(
-              source: value[0],
+              source: value[0] as String,
               width: 26,
               height: 26,
               fit: BoxFit.contain,
-              color: ColorConstants.backgroundColor,
+              color: ColorConstants.primaryColor,
             ),
           ),
         );
@@ -30,50 +34,74 @@ class ContactInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     return Container(
-      padding: const EdgeInsets.all(16.0),
-      color: ColorConstants.cardColor,
+      padding: EdgeInsets.symmetric(horizontal: width * .2, vertical: 16),
+      color: ColorConstants.seccoundaryColor,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           const OdinText(
-              text: 'Contact',
-              type: OdinTextType.custom,
-              textSize: 20,
-              textColor: ColorConstants.backgroundColor,
-              textWeight: FontWeight.bold),
-          const ExpansionTile(
-            tilePadding: EdgeInsets.all(0),
-            collapsedShape: UnderlineInputBorder(
-              borderSide: BorderSide(
-                color: ColorConstants.backgroundColor,
-                width: .25,
-              ),
-            ),
-            shape: UnderlineInputBorder(
-              borderSide: BorderSide(
-                color: ColorConstants.backgroundColor,
-                width: .25,
-              ),
-            ),
-            childrenPadding: EdgeInsets.symmetric(horizontal: 16),
-            expandedAlignment: Alignment.centerLeft,
-            expandedCrossAxisAlignment: CrossAxisAlignment.start,
-            title: OdinText(
-              text: "We Are Odin.",
-            ),
+            text: 'Contact',
+            type: OdinTextType.custom,
+            textSize: 20,
+            textColor: ColorConstants.primaryColor,
+            textWeight: FontWeight.bold,
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          const OdinText(
+            text: 'We are ODIN',
+            type: OdinTextType.subtitle,
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          const OdinText(
+            text: 'Delivery and returns policy',
+            type: OdinTextType.subtitle,
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          const OdinText(
+            text: 'Privacy policy',
+            type: OdinTextType.subtitle,
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          const OdinText(
+            text: 'Terms and conditions',
+            type: OdinTextType.subtitle,
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              ListTile(
-                title: OdinText(
-                  text: "Obout Us",
-                  type: OdinTextType.title,
+              SizedBox(
+                width: width * .2,
+                child: const OdinDivider(
+                  thickness: 2,
+                ),
+              ),
+              const OdinText(
+                text: 'Social Media',
+                type: OdinTextType.subtitle,
+              ),
+              SizedBox(
+                width: width * .2,
+                child: const OdinDivider(
+                  thickness: 2,
                 ),
               ),
             ],
           ),
           const SizedBox(
-            height: 4,
+            height: 10,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,

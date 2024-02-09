@@ -1,4 +1,4 @@
-import '/library.dart';
+import 'package:odin_cloth_wear/library.dart';
 
 /// A repository for [CartItem] with hive db
 
@@ -16,7 +16,7 @@ class CartRepository {
   /// ADD [CartItem]
 
   Future<(CartItem?, ResponseStatus)> add(
-      String itemID, int color, String size) async {
+      String itemID, int color, String size,) async {
     final box = await Hive.openBox<CartItem>('cart');
     final itemRepository = ItemRepository(FirebaseFirestore.instance);
     final item = (await itemRepository.getById(itemID)).$1; //add null check
@@ -49,9 +49,9 @@ class CartRepository {
     final box = await Hive.openBox<CartItem>('cart');
     await box.delete(id);
     if (box.get(id) != null) {
-      return (ResponseStatus.error);
+      return ResponseStatus.error;
     } else {
-      return (ResponseStatus.success);
+      return ResponseStatus.success;
     }
   }
 }

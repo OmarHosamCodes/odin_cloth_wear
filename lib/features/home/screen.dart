@@ -1,8 +1,8 @@
-import 'package:odin_cloth_wear/features/home/widgets/contact_info.dart';
+import 'package:odin_cloth_wear/library.dart';
 
-import '/library.dart';
-
+/// A [StatelessWidget] that displays the home screen.
 class HomeScreen extends StatelessWidget {
+  /// A [StatelessWidget] that displays the home screen.
   const HomeScreen({super.key});
 
   @override
@@ -53,7 +53,7 @@ class HomeScreen extends StatelessWidget {
 
                       return items.when(
                         data: (items) {
-                          final Item item = items[index];
+                          final item = items[index];
                           return Column(
                             children: [
                               AspectRatio(
@@ -70,7 +70,7 @@ class HomeScreen extends StatelessWidget {
                                   ),
                                   child: Card(
                                     clipBehavior: Clip.antiAlias,
-                                    color: ColorConstants.cardColor,
+                                    color: ColorConstants.seccoundaryColor,
                                     child: Hero(
                                       tag: item.id!,
                                       child: ImageViewer(item: item),

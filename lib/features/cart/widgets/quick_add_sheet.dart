@@ -1,8 +1,12 @@
-import '/library.dart';
+import 'package:odin_cloth_wear/library.dart';
 
-void openQuickAddSheet(BuildContext context,
-    {required Item item, required WidgetRef ref}) {
-  showModalBottomSheet(
+/// A [StatelessWidget] that displays the quick add sheet.
+void openQuickAddSheet(
+  BuildContext context, {
+  required Item item,
+  required WidgetRef ref,
+}) {
+  showModalBottomSheet<void>(
     context: context,
     isScrollControlled: true,
     builder: (context) {
@@ -14,9 +18,15 @@ void openQuickAddSheet(BuildContext context,
   );
 }
 
+/// A [StatelessWidget] that displays the quick add sheet.
 class QuickAddSheet extends StatelessWidget {
-  const QuickAddSheet({super.key, required this.item, required this.ref});
+  /// A [StatelessWidget] that displays the quick add sheet.
+  const QuickAddSheet({required this.item, required this.ref, super.key});
+
+  /// The [Item] to display.
   final Item item;
+
+  /// The [WidgetRef] to display.
   final WidgetRef ref;
 
   @override
@@ -25,7 +35,6 @@ class QuickAddSheet extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const OdinText(
@@ -33,7 +42,7 @@ class QuickAddSheet extends StatelessWidget {
             type: OdinTextType.custom,
             textSize: 16,
             textWeight: FontWeight.bold,
-            textColor: ColorConstants.cardColor,
+            textColor: ColorConstants.seccoundaryColor,
           ),
           const SizedBox(height: 16),
           ColorPicker(item: item),
@@ -46,18 +55,17 @@ class QuickAddSheet extends StatelessWidget {
               type: OdinTextType.custom,
               textSize: 14,
               textWeight: FontWeight.bold,
-              textColor: ColorConstants.titleTextColor,
+              textColor: ColorConstants.primaryColor,
             ),
             onPressed: () async {
-              final size = ref.read(sizePickerProvider).pickedState;
-              final color = ref.read(colorPickerProvider).pickedState;
+              final size = ref.read(sizePickerProvider).pickedState!;
+              final color = ref.read(colorPickerProvider).pickedState!;
               await ref.read(cartRepositoryProvider).add(item.id!, color, size);
-              ref.invalidate(cartProvider);
-              ref.read(cartProvider);
-
+              ref
+                ..invalidate(cartProvider)
+                ..read(cartProvider);
+              // ignore: use_build_context_synchronously
               context.pop();
-              ref.read(sizePickerProvider.notifier).reset();
-              ref.read(colorPickerProvider.notifier).reset();
             },
           ),
         ],

@@ -1,15 +1,21 @@
-import '/library.dart';
+import 'package:odin_cloth_wear/library.dart';
 
+/// A [StateNotifier] that manages the state of the picker.
 class PickerState<T> {
-  T? pickedState;
-  bool isSelected;
-
+  /// A [StateNotifier] that manages the state of the picker.
   PickerState({
     required this.pickedState,
     required this.isSelected,
   });
 
-  PickerState copyWith({
+  /// The picked state.
+  T? pickedState;
+
+  /// Whether the state is selected.
+  bool isSelected;
+
+  /// A [StateNotifier] that manages the state of the picker.
+  PickerState<T> copyWith({
     T? pickedState,
     bool? isSelected,
   }) {
@@ -20,30 +26,29 @@ class PickerState<T> {
   }
 }
 
-class PickerNotifier<T> extends StateNotifier<PickerState> {
+/// A [StateNotifier] that manages the state of the picker.
+class PickerNotifier<T> extends StateNotifier<PickerState<T>> {
+  /// A [StateNotifier] that manages the state of the picker.
   PickerNotifier()
       : super(PickerState<T>(pickedState: null, isSelected: false));
 
+  /// Selects a state.
   void select(T pickedState) {
     state = state.copyWith(
       pickedState: pickedState,
       isSelected: true,
     );
   }
-
-  void reset() {
-    state = state.copyWith(
-      pickedState: null,
-      isSelected: false,
-    );
-  }
 }
 
+/// A [StateNotifier] that manages the state of the picker.
 final sizePickerProvider =
-    StateNotifierProvider<PickerNotifier, PickerState>((ref) {
+    StateNotifierProvider<PickerNotifier<String>, PickerState<String>>((ref) {
   return PickerNotifier();
 });
+
+/// A [StateNotifier] that manages the state of the picker.
 final colorPickerProvider =
-    StateNotifierProvider<PickerNotifier, PickerState>((ref) {
+    StateNotifierProvider<PickerNotifier<int>, PickerState<int>>((ref) {
   return PickerNotifier();
 });

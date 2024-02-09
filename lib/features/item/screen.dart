@@ -1,12 +1,14 @@
-import 'package:odin_cloth_wear/features/item/widgets/description.dart';
+import 'package:odin_cloth_wear/library.dart';
 
-import '/library.dart';
-
+/// A [StatelessWidget] that displays the item screen.
 class ItemScreen extends StatelessWidget {
+  /// A [StatelessWidget] that displays the item screen.
   const ItemScreen({
-    super.key,
     required this.id,
+    super.key,
   });
+
+  /// The [Item] id.
   final String id;
   @override
   Widget build(BuildContext context) {
@@ -15,10 +17,11 @@ class ItemScreen extends StatelessWidget {
     return Scaffold(
       extendBody: true,
       appBar: AppBar(
+        backgroundColor: ColorConstants.seccoundaryColor,
         leading: IconButton(
           icon: const Icon(
             EvaIcons.arrowBack,
-            color: ColorConstants.backgroundColor,
+            color: ColorConstants.primaryColor,
           ),
           onPressed: () => context.pop(),
         ),
@@ -29,13 +32,14 @@ class ItemScreen extends StatelessWidget {
             builder: (_, WidgetRef ref, __) {
               return IconButton(
                 onPressed: () {
-                  ref.invalidate(cartProvider);
-                  ref.read(cartProvider);
+                  ref
+                    ..invalidate(cartProvider)
+                    ..read(cartProvider);
                   context.goNamed(Routes.cartRoot);
                 },
                 icon: const Icon(
                   EvaIcons.shoppingCartOutline,
-                  color: ColorConstants.backgroundColor,
+                  color: ColorConstants.primaryColor,
                 ),
               );
             },
@@ -93,7 +97,6 @@ class ItemScreen extends StatelessWidget {
             loading: () => SingleChildScrollView(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   OdinShimmer(
                     height: height,

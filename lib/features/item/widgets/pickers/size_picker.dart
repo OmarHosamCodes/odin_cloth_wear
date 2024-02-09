@@ -1,19 +1,22 @@
-import '/library.dart';
+import 'package:odin_cloth_wear/library.dart';
 
+/// A [StatelessWidget] that displays the sizes of an [Item].
 class SizePicker extends StatelessWidget {
-  const SizePicker({super.key, required this.item});
+  /// A [StatelessWidget] that displays the sizes of an [Item].
+  const SizePicker({required this.item, super.key});
 
+  /// The [Item] to display.
   final Item item;
   @override
   Widget build(BuildContext context) {
-    late final List sizes = item.sizes!.map((e) => e).toList();
+    late final sizes = item.sizes!.map((e) => e).toList();
     return Consumer(
       builder: (_, WidgetRef ref, __) {
         ref.watch(sizePickerProvider);
-        final selectedSize = ref.read(sizePickerProvider).pickedState;
+        final selectedSize =
+            ref.read(sizePickerProvider).pickedState ?? item.sizes!.first;
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
           children: sizes.map(
             (size) {
               final isSelected = size == selectedSize;
@@ -29,22 +32,22 @@ class SizePicker extends StatelessWidget {
                   padding: const EdgeInsets.all(3),
                   decoration: BoxDecoration(
                     color: isSelected
-                        ? ColorConstants.chipColor
+                        ? ColorConstants.seccoundaryColor
                         : Colors.transparent,
                     border: Border.all(
                       color: isSelected
-                          ? ColorConstants.chipColor
-                          : ColorConstants.chipColor.withOpacity(0.1),
+                          ? ColorConstants.seccoundaryColor
+                          : ColorConstants.seccoundaryColor.withOpacity(0.1),
                       width: 2,
                     ),
                   ),
                   child: Center(
                     child: OdinText(
-                      text: size,
+                      text: size as String,
                       type: OdinTextType.custom,
                       textColor: isSelected
-                          ? ColorConstants.titleTextColor
-                          : ColorConstants.chipColor,
+                          ? ColorConstants.primaryColor
+                          : ColorConstants.seccoundaryColor,
                       textSize: 14,
                       textWeight:
                           isSelected ? FontWeight.w600 : FontWeight.w400,

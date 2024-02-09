@@ -1,4 +1,4 @@
-import '/library.dart';
+import 'package:odin_cloth_wear/library.dart';
 
 /// A class to represent an [ItemRepository]
 
@@ -11,7 +11,9 @@ class ItemRepository {
   /// [FirebaseFirestore] instance
   final FirebaseFirestore firestore;
 
-  static get instance => ItemRepository(FirebaseFirestore.instance);
+  /// [ItemRepository] instance
+  static final ItemRepository instance =
+      ItemRepository(FirebaseFirestore.instance);
 
   /// [Item]s collection
   static const String collection = 'items';
@@ -32,7 +34,7 @@ class ItemRepository {
   /// PUT [Item]
   Future<ResponseStatus> put(Item item) async {
     try {
-      await _itemsCollection.doc(item.id!).update(item.toJson());
+      await _itemsCollection.doc(item.id).update(item.toJson());
       return ResponseStatus.success;
     } catch (e) {
       return ResponseStatus.error;
@@ -68,8 +70,10 @@ class ItemRepository {
 
   /// GET [Item]s
   Future<List<Item>> get() {
-    return _itemsCollection.get().then((value) => value.docs
-        .map((doc) => Item.fromJson(doc.data()! as Map<String, dynamic>))
-        .toList());
+    return _itemsCollection.get().then(
+          (value) => value.docs
+              .map((doc) => Item.fromJson(doc.data()! as Map<String, dynamic>))
+              .toList(),
+        );
   }
 }

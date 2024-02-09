@@ -17,17 +17,17 @@ class Item {
 
   /// Creates an [Item] from a json
   factory Item.fromJson(Map<String, dynamic> json) => Item(
-        id: json[idKey],
-        name: json[nameKey],
-        description: json[descriptionKey],
-        images: json[imagesKey],
-        price: json[priceKey],
-        category: json[categoryKey],
-        subCategory: json[subCategoryKey],
-        colors: json[colorsKey],
-        sizes: json[sizesKey],
-        sizing: json[sizingKey],
-        tags: json[tagsKey],
+        id: json[idKey] as String,
+        name: json[nameKey] as String,
+        description: json[descriptionKey] as String,
+        images: json[imagesKey] as List<dynamic>,
+        price: json[priceKey] as double,
+        category: json[categoryKey] as String,
+        subCategory: json[subCategoryKey] as String,
+        colors: json[colorsKey] as List<dynamic>,
+        sizes: json[sizesKey] as List<dynamic>,
+        sizing: json[sizingKey] as List<dynamic>,
+        tags: json[tagsKey] as List<dynamic>,
       );
 
   /// Creates a copy of an [Item]
@@ -118,6 +118,7 @@ class Item {
   /// Sizes of the [Item]
   final List<dynamic>? sizes;
 
+  /// Sizing of the [Item]
   final List<dynamic>? sizing;
 
   /// Tags of the [Item]

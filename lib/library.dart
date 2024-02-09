@@ -1,11 +1,11 @@
-library library;
+// ignore_for_file: directives_ordering
 
 //* Screens
 
 export 'main.dart';
+export 'features/cart/screen.dart';
 export 'features/home/screen.dart';
 export 'features/item/screen.dart';
-export 'features/cart/screen.dart';
 export 'features/notFound/screen.dart';
 
 //* Widgets
@@ -29,6 +29,9 @@ export 'features/item/widgets/pickers/size_picker.dart';
 export 'features/item/widgets/title_and_pricing.dart';
 export 'features/item/widgets/reviews.dart';
 export 'features/cart/widgets/cart_item_tile.dart';
+export 'features/cart/widgets/quick_add_sheet.dart';
+export 'features/home/widgets/contact_info.dart';
+export 'features/item/widgets/description.dart';
 
 //* Controllers
 
@@ -47,6 +50,7 @@ export 'features/admin/assets/provider.dart';
 export 'features/item/provider.dart';
 export 'features/cart/provider.dart';
 export 'features/item/widgets/pickers/provider.dart';
+export 'features/home/provider.dart';
 
 //* Extensions
 
@@ -61,7 +65,6 @@ export 'features/cart/model.dart';
 //* Constants
 
 export 'constants/color_constants.dart';
-export 'constants/app_constants.dart';
 export 'constants/routes_constants.dart';
 export 'constants/response_status.dart';
 
@@ -84,14 +87,14 @@ export 'package:url_strategy/url_strategy.dart' show setPathUrlStrategy;
 export 'package:shimmer/shimmer.dart' show Shimmer;
 export 'package:responsive_framework/responsive_framework.dart'
     show
-        ResponsiveBreakpoints,
         Breakpoint,
-        MOBILE,
-        TABLET,
         DESKTOP,
+        MOBILE,
+        ResponsiveBreakpoints,
         ResponsiveRowColumn,
         ResponsiveRowColumnItem,
-        ResponsiveRowColumnType;
+        ResponsiveRowColumnType,
+        TABLET;
 export 'dart:async' show Timer;
 export 'package:eva_icons_flutter/eva_icons_flutter.dart';
 export 'package:flutter_advanced_drawer/flutter_advanced_drawer.dart';
@@ -99,6 +102,6 @@ export 'dart:convert' show base64Decode;
 export 'package:cached_network_image/cached_network_image.dart'
     show CachedNetworkImage;
 export 'package:expandable/expandable.dart';
-export 'package:flutter_dotenv/flutter_dotenv.dart' show dotenv;
 export 'package:fluttertoast/fluttertoast.dart'
-    show Fluttertoast, ToastGravity, Toast;
+    show Fluttertoast, Toast, ToastGravity;
+export 'package:flutter_svg/flutter_svg.dart' show SvgPicture;

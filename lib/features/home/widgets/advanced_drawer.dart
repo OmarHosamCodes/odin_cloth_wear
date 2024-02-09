@@ -1,13 +1,15 @@
-import '/library.dart';
+import 'package:odin_cloth_wear/library.dart';
 
+/// A [ConsumerWidget] that displays a [CartItem] in a [ListTile].
 class HomeAdvancedDrawer extends StatelessWidget {
+  /// A [ConsumerWidget] that displays a [CartItem] in a [ListTile].
   const HomeAdvancedDrawer({super.key, this.child});
+
+  /// The [CartItem] to display.
   final Widget? child;
   @override
   Widget build(BuildContext context) {
-    AdvancedDrawerController advancedDrawerController =
-        AdvancedDrawerController();
-    advancedDrawerController.value = AdvancedDrawerValue.hidden();
+    final advancedDrawerController = AdvancedDrawerController();
     void handleMenuButtonPressed() {
       advancedDrawerController.toggleDrawer();
     }
@@ -16,22 +18,19 @@ class HomeAdvancedDrawer extends StatelessWidget {
       backdrop: Container(
         width: double.infinity,
         height: double.infinity,
-        color: ColorConstants.cardColor,
+        color: ColorConstants.seccoundaryColor,
         // decoration: const BoxDecoration(
         //   gradient: LinearGradient(
         //     begin: Alignment.topLeft,
         //     end: Alignment.bottomRight,
-        //     colors: [ColorConstants.chipColor, ColorConstants.cardColor],
+        //     colors:
+        // [ColorConstants.chipColor, ColorConstants.seccoundaryColor],
         //   ),
         // ),
       ),
       controller: advancedDrawerController,
       animationCurve: Curves.easeInOut,
       animationDuration: const Duration(milliseconds: 300),
-      animateChildDecoration: true,
-      rtlOpening: false,
-      openScale: 1.0,
-      disabledGestures: false,
       drawer: Align(
         alignment: Alignment.topCenter,
         child: ListView(
@@ -56,7 +55,7 @@ class HomeAdvancedDrawer extends StatelessWidget {
                   ),
                   error: (error, stackTrace) {
                     return const Center(
-                      child: OdinText(text: "error"),
+                      child: OdinText(text: 'error'),
                     );
                   },
                 );
@@ -66,16 +65,16 @@ class HomeAdvancedDrawer extends StatelessWidget {
               onTap: () {},
               leading: const Icon(
                 EvaIcons.home,
-                color: ColorConstants.backgroundColor,
+                color: ColorConstants.primaryColor,
               ),
               title: const OdinText(text: 'Home'),
             ),
             ExpansionTile(
               childrenPadding: const EdgeInsets.only(left: 16),
-              collapsedIconColor: ColorConstants.backgroundColor,
+              collapsedIconColor: ColorConstants.primaryColor,
               leading: const Icon(
                 EvaIcons.sun,
-                color: ColorConstants.backgroundColor,
+                color: ColorConstants.primaryColor,
               ),
               title: const OdinText(text: 'Summer Collection'),
               children: [
@@ -83,7 +82,7 @@ class HomeAdvancedDrawer extends StatelessWidget {
                   onTap: () {},
                   leading: const Icon(
                     EvaIcons.umbrella,
-                    color: ColorConstants.backgroundColor,
+                    color: ColorConstants.primaryColor,
                   ),
                   title: const OdinText(text: 'Beach Wear'),
                 ),
@@ -91,7 +90,7 @@ class HomeAdvancedDrawer extends StatelessWidget {
                   onTap: () {},
                   leading: const Icon(
                     EvaIcons.umbrella,
-                    color: ColorConstants.backgroundColor,
+                    color: ColorConstants.primaryColor,
                   ),
                   title: const OdinText(text: 'Swim Wear'),
                 ),
@@ -99,10 +98,10 @@ class HomeAdvancedDrawer extends StatelessWidget {
             ),
             ExpansionTile(
               childrenPadding: const EdgeInsets.only(left: 16),
-              collapsedIconColor: ColorConstants.backgroundColor,
+              collapsedIconColor: ColorConstants.primaryColor,
               leading: const Icon(
                 EvaIcons.umbrella,
-                color: ColorConstants.backgroundColor,
+                color: ColorConstants.primaryColor,
               ),
               title: const OdinText(text: 'Winter Collection'),
               children: [
@@ -110,7 +109,7 @@ class HomeAdvancedDrawer extends StatelessWidget {
                   onTap: () {},
                   leading: const Icon(
                     EvaIcons.umbrella,
-                    color: ColorConstants.backgroundColor,
+                    color: ColorConstants.primaryColor,
                   ),
                   title: const OdinText(text: 'Jackets'),
                 ),
@@ -118,7 +117,7 @@ class HomeAdvancedDrawer extends StatelessWidget {
                   onTap: () {},
                   leading: const Icon(
                     EvaIcons.umbrella,
-                    color: ColorConstants.backgroundColor,
+                    color: ColorConstants.primaryColor,
                   ),
                   title: const OdinText(text: 'Sweaters'),
                 ),
@@ -128,7 +127,7 @@ class HomeAdvancedDrawer extends StatelessWidget {
               onTap: () {},
               leading: const Icon(
                 EvaIcons.flash,
-                color: ColorConstants.priceTextColor,
+                color: Color(0xFFFFD740),
               ),
               title: const OdinText(text: 'Hot Now'),
             ),
@@ -142,7 +141,6 @@ class HomeAdvancedDrawer extends StatelessWidget {
                     data: (items) {
                       final controller = ScrollController(
                         initialScrollOffset: 20,
-                        keepScrollOffset: true,
                       );
                       final hotItems = items
                           .where((item) => item.tags!.contains('hot'))
@@ -163,7 +161,7 @@ class HomeAdvancedDrawer extends StatelessWidget {
                           itemBuilder: (context, index) {
                             final item = hotItems[index];
                             return OdinImageNetwork(
-                              source: item.images!.first,
+                              source: item.images!.first.toString(),
                               height: 100,
                               width: 100,
                               fit: BoxFit.contain,
@@ -186,19 +184,17 @@ class HomeAdvancedDrawer extends StatelessWidget {
       ),
       child: Scaffold(
         extendBody: true,
-        extendBodyBehindAppBar: false,
         appBar: AppBar(
-          backgroundColor: ColorConstants.cardColor,
+          backgroundColor: ColorConstants.seccoundaryColor,
           elevation: 0,
           title: const FittedBox(
-            fit: BoxFit.contain,
             child: AppBarLogo(),
           ),
           centerTitle: true,
           leading: IconButton(
             icon: const Icon(
               EvaIcons.menu2Outline,
-              color: ColorConstants.backgroundColor,
+              color: ColorConstants.primaryColor,
             ),
             onPressed: handleMenuButtonPressed,
           ),
@@ -207,13 +203,14 @@ class HomeAdvancedDrawer extends StatelessWidget {
               builder: (_, WidgetRef ref, __) {
                 return IconButton(
                   onPressed: () {
-                    ref.invalidate(cartProvider);
-                    ref.read(cartProvider);
+                    ref
+                      ..invalidate(cartProvider)
+                      ..read(cartProvider);
                     context.goNamed(Routes.cartRoot);
                   },
                   icon: const Icon(
                     EvaIcons.shoppingCartOutline,
-                    color: ColorConstants.backgroundColor,
+                    color: ColorConstants.primaryColor,
                   ),
                 );
               },

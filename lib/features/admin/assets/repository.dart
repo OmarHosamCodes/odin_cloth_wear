@@ -12,7 +12,8 @@
 //   static const String document = 'assets';
 
 //   /// [AdminAssets]s collection
-//   DocumentReference get _itemsCollection => firestore.collection(collection).doc(document);
+//   DocumentReference get _itemsCollection => firestore.collection(collection)
+// .doc(document);
 
 //   /// POST [AdminAssets]
 //   Future<ResponseStatus> post(AdminAssets item) async {
@@ -60,7 +61,8 @@
 //   /// GET [AdminAssets]s
 //   Future<List<AdminAssets>> get() {
 //     return _itemsCollection.get().then((value) => value.docs
-//         .map((doc) => AdminAssets.fromJson(doc.data()! as Map<String, dynamic>))
+//         .map((doc) => AdminAssets.fromJson(doc.data()!
+// as Map<String, dynamic>))
 //         .toList());
 //   }
 // }

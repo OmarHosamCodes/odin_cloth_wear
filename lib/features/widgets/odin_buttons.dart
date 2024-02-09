@@ -1,21 +1,30 @@
-import '/library.dart';
+import 'package:odin_cloth_wear/library.dart';
 
+/// A [OdinElevatedButton] Custom Widget.
 class OdinElevatedButton extends StatelessWidget {
+  /// A [OdinElevatedButton] Custom Widget.
   const OdinElevatedButton({
-    super.key,
     required this.child,
+    super.key,
     this.onPressed,
+    this.color = ColorConstants.seccoundaryColor,
   });
 
+  /// The [Widget] to display.
   final Widget child;
+
+  /// The [Color] of the button.
+  final Color color;
+
+  /// The [Function] to display.
   final void Function()? onPressed;
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: ColorConstants.cardColor,
-        foregroundColor: ColorConstants.titleTextColor,
+        backgroundColor: color,
+        foregroundColor: ColorConstants.primaryColor,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),

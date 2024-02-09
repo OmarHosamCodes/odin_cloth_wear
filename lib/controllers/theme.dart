@@ -1,10 +1,12 @@
-import '/library.dart';
+import 'package:odin_cloth_wear/library.dart';
 
+/// A [ThemeController].
 class ThemeController {
+  /// The theme.
   static ThemeData get theme {
     return ThemeData(
       primarySwatch: Colors.blue,
-      scaffoldBackgroundColor: ColorConstants.backgroundColor,
+      scaffoldBackgroundColor: ColorConstants.primaryColor,
       appBarTheme: const AppBarTheme(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -16,7 +18,7 @@ class ThemeController {
         ),
       ),
       cardTheme: CardTheme(
-        color: ColorConstants.cardColor,
+        color: ColorConstants.seccoundaryColor,
         elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
@@ -25,7 +27,6 @@ class ThemeController {
     );
   }
 
-  static ThemeMode get themeMode {
-    return ThemeMode.light;
-  }
+  /// The theme mode.
+  static ThemeMode get themeMode => ThemeMode.light;
 }

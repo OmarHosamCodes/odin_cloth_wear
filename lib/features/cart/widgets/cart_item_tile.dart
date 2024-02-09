@@ -1,10 +1,14 @@
-import '/library.dart';
+import 'package:odin_cloth_wear/library.dart';
 
+/// A [ConsumerWidget] that displays a [CartItem] in a [ListTile].
 class CartItemTile extends ConsumerWidget {
+  /// A [ConsumerWidget] that displays a [CartItem] in a [ListTile].
   const CartItemTile({
-    super.key,
     required this.cartItem,
+    super.key,
   });
+
+  /// The [CartItem] to display.
   final CartItem cartItem;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -15,7 +19,7 @@ class CartItemTile extends ConsumerWidget {
           leading: AspectRatio(
             aspectRatio: .8,
             child: OdinImageNetwork(
-              source: item!.images!.first,
+              source: item!.images!.first.toString(),
               fit: BoxFit.fitHeight,
             ),
           ),
@@ -24,18 +28,17 @@ class CartItemTile extends ConsumerWidget {
             type: OdinTextType.custom,
             textSize: 16,
             textWeight: FontWeight.w600,
-            textColor: ColorConstants.cardColor,
+            textColor: ColorConstants.seccoundaryColor,
           ),
           subtitle: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               OdinText(
                 text: '${item.price} EGP',
                 type: OdinTextType.custom,
                 textSize: 12,
                 textWeight: FontWeight.w600,
-                textColor: ColorConstants.cardColor,
+                textColor: ColorConstants.seccoundaryColor,
               ),
               Row(
                 children: [
@@ -65,9 +68,9 @@ class CartItemTile extends ConsumerWidget {
                     margin: const EdgeInsets.only(top: 10),
                     padding: const EdgeInsets.all(3),
                     decoration: BoxDecoration(
-                      color: ColorConstants.cardColor,
+                      color: ColorConstants.seccoundaryColor,
                       border: Border.all(
-                        color: ColorConstants.chipColor,
+                        color: ColorConstants.seccoundaryColor,
                         width: 2,
                       ),
                     ),
@@ -75,7 +78,7 @@ class CartItemTile extends ConsumerWidget {
                       child: OdinText(
                         text: cartItem.size!,
                         type: OdinTextType.custom,
-                        textColor: ColorConstants.titleTextColor,
+                        textColor: ColorConstants.primaryColor,
                         textSize: 14,
                         textWeight: FontWeight.w600,
                       ),
@@ -89,8 +92,9 @@ class CartItemTile extends ConsumerWidget {
             icon: const Icon(EvaIcons.trash2Outline, color: Colors.red),
             onPressed: () async {
               await ref.read(cartRepositoryProvider).delete(cartItem.id!);
-              ref.read(cartProvider);
-              ref.invalidate(cartProvider);
+              ref
+                ..read(cartProvider)
+                ..invalidate(cartProvider);
             },
           ),
         );
@@ -98,13 +102,11 @@ class CartItemTile extends ConsumerWidget {
       loading: () => const ListTile(
         title: OdinText(
           text: 'Loading...',
-          type: OdinTextType.title,
         ),
       ),
       error: (error, stackTrace) => const ListTile(
         title: OdinText(
           text: 'Failed to load item',
-          type: OdinTextType.title,
         ),
       ),
     );

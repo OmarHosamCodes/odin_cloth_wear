@@ -1,20 +1,20 @@
-import '/library.dart';
+import 'package:odin_cloth_wear/library.dart';
 
+/// A [StatelessWidget] that displays the item reviews.
 class Reviews extends StatelessWidget {
+  /// A [StatelessWidget] that displays the item reviews.
   const Reviews({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: ColorConstants.cardColor,
+      color: ColorConstants.seccoundaryColor,
       width: double.infinity,
       child: const Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           OdinText(
             text: 'Reviews',
-            type: OdinTextType.title,
           ),
           Padding(
             padding: EdgeInsets.symmetric(

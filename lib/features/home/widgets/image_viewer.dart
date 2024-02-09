@@ -1,19 +1,24 @@
-import '/library.dart';
+import 'package:odin_cloth_wear/library.dart';
 
+/// A [StatelessWidget] that displays the images of an [Item].
 class ImageViewer extends StatelessWidget {
+  /// A [StatelessWidget] that displays the images of an [Item].
   const ImageViewer({
-    super.key,
     required this.item,
+    super.key,
     this.showDetails = true,
   });
 
+  /// The [Item] to display.
   final Item item;
+
+  /// Whether to show the details of the [Item].
   final bool showDetails;
 
   @override
   Widget build(BuildContext context) {
     final pageController = PageController();
-    ValueNotifier<int> currentPage = ValueNotifier(0);
+    final currentPage = ValueNotifier<int>(0);
 
     return Stack(
       alignment: Alignment.center,
@@ -54,14 +59,14 @@ class ImageViewer extends StatelessWidget {
               onTap: () => context.pushNamed(
                 Routes.itemRoot,
                 pathParameters: {
-                  "id": item.id!,
+                  'id': item.id!,
                 },
                 queryParameters: {
-                  "id": item.id!,
+                  'id': item.id,
                 },
               ),
               child: OdinImageNetwork(
-                source: item.images![index],
+                source: item.images![index].toString(),
                 fit: BoxFit.cover,
               ),
             );
@@ -99,8 +104,8 @@ class ImageViewer extends StatelessWidget {
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               color: pageControllerPageWatcher == imagesIndex
-                                  ? ColorConstants.backgroundColor
-                                  : ColorConstants.backgroundColor
+                                  ? ColorConstants.primaryColor
+                                  : ColorConstants.primaryColor
                                       .withOpacity(0.5),
                             ),
                           ),

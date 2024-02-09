@@ -1,6 +1,8 @@
-import '/library.dart';
+import 'package:odin_cloth_wear/library.dart';
 
+/// A [StatelessWidget] that displays the app bar logo.
 class AppBarLogo extends StatelessWidget {
+  /// A [StatelessWidget] that displays the app bar logo.
   const AppBarLogo({
     super.key,
   });
@@ -25,7 +27,7 @@ class AppBarLogo extends StatelessWidget {
           ),
           error: (error, stackTrace) {
             return const Center(
-              child: OdinText(text: "error"),
+              child: OdinText(text: 'error'),
             );
           },
         );

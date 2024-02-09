@@ -1,7 +1,7 @@
-import 'library.dart';
+import 'package:odin_cloth_wear/library.dart';
 
 void main() async {
-  // if (kIsWeb) setPathUrlStrategy();
+  if (kIsWeb) setPathUrlStrategy();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -10,21 +10,16 @@ void main() async {
   Hive.registerAdapter(CartItemAdapter());
   runApp(const ProviderScope(child: OdinClothWear()));
 }
-//TODO:
-//! 1. Add a new screen for the admin to add new items
-//! 2. Add Shimmer effect to the loading screen
-/////! 3. Add Loader Bar in splash screen
-//! 4. Fix Page Controller error when routing
-//! 5. Add Repositories for each model
-//! 6. Add Hive Local DB for cart
 
+/// A [StatelessWidget] that displays the Odin Cloth Wear app.
 class OdinClothWear extends StatelessWidget {
-  const OdinClothWear({Key? key}) : super(key: key);
+  /// A [StatelessWidget] that displays the Odin Cloth Wear app.
+  const OdinClothWear({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: AppConstants.appName,
+      title: 'Odin Cloth Wear',
       debugShowCheckedModeBanner: false,
       theme: ThemeController.theme,
       themeMode: ThemeController.themeMode,

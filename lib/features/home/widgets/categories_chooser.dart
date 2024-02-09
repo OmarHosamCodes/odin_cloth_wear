@@ -1,6 +1,8 @@
-import '/library.dart';
+import 'package:odin_cloth_wear/library.dart';
 
+/// A [ConsumerWidget] that displays a [CartItem] in a [ListTile].
 class CategoriesChooser extends StatelessWidget {
+  /// A [ConsumerWidget] that displays a [CartItem] in a [ListTile].
   const CategoriesChooser({
     super.key,
   });
@@ -17,15 +19,13 @@ class CategoriesChooser extends StatelessWidget {
               width: double.maxFinite,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: List.generate(
                   adminAssets.categories.length,
                   (index) => Padding(
-                    padding: const EdgeInsets.all(4.0),
+                    padding: const EdgeInsets.all(4),
                     child: OdinChip(
                       label: OdinText(
-                        text: adminAssets.categories[index],
-                        type: OdinTextType.title,
+                        text: adminAssets.categories[index].toString(),
                       ),
                     ),
                   ),
@@ -46,7 +46,7 @@ class CategoriesChooser extends StatelessWidget {
           ),
           error: (error, stackTrace) {
             return const Center(
-              child: OdinText(text: "error"),
+              child: OdinText(text: 'error'),
             );
           },
         );

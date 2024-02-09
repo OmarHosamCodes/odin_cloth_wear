@@ -1,4 +1,8 @@
+// ignore_for_file: strict_raw_type
+
+/// [AdminAssets] model
 class AdminAssets {
+  /// [AdminAssets] model
   AdminAssets({
     required this.logo,
     required this.categories,
@@ -6,16 +10,7 @@ class AdminAssets {
     required this.social,
   });
 
-  static const String logoKey = 'logo';
-  static const String categoriesKey = 'categories';
-  static const String backgroundImagesKey = 'backgroundImages';
-  static const String socialKey = 'social';
-
-  final String logo;
-  final List categories;
-  final List backgroundImages;
-  final Map<String, dynamic> social;
-
+  /// Creates an [AdminAssets] from a json
   factory AdminAssets.fromJson(Map<String, dynamic> json) {
     return AdminAssets(
       logo: json[logoKey] as String,
@@ -25,6 +20,40 @@ class AdminAssets {
     );
   }
 
+  /// Creates an empty [AdminAssets]
+  AdminAssets.empty()
+      : this(
+          logo: '',
+          categories: [],
+          backgroundImages: [],
+          social: {},
+        );
+
+  /// The key for the logo
+  static const String logoKey = 'logo';
+
+  /// The key for the categories
+  static const String categoriesKey = 'categories';
+
+  /// The key for the background images
+  static const String backgroundImagesKey = 'backgroundImages';
+
+  /// The key for the social
+  static const String socialKey = 'social';
+
+  /// The logo
+  final String logo;
+
+  /// The categories
+  final List categories;
+
+  /// The background images
+  final List backgroundImages;
+
+  /// The social
+  final Map<String, dynamic> social;
+
+  /// Converts the [AdminAssets] to a json
   Map<String, dynamic> toJson() {
     return {
       logoKey: logo,
@@ -34,6 +63,7 @@ class AdminAssets {
     };
   }
 
+  /// Creates a copy of an [AdminAssets]
   AdminAssets copyWith({
     String? logo,
     List? categories,
@@ -47,12 +77,4 @@ class AdminAssets {
       social: social ?? this.social,
     );
   }
-
-  AdminAssets.empty()
-      : this(
-          logo: '',
-          categories: [],
-          backgroundImages: [],
-          social: {},
-        );
 }

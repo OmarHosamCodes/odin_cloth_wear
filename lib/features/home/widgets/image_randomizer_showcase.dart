@@ -1,6 +1,8 @@
-import '/library.dart';
+import 'package:odin_cloth_wear/library.dart';
 
+/// A [ConsumerWidget] that displays a [ImageRandomizerShowcase].
 class ImageRandomizerShowcase extends StatelessWidget {
+  /// A [ConsumerWidget] that displays a [ImageRandomizerShowcase].
   const ImageRandomizerShowcase({
     super.key,
   });
@@ -8,7 +10,7 @@ class ImageRandomizerShowcase extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final pageController = PageController();
-    ValueNotifier<int> currentPage = ValueNotifier(0);
+    final currentPage = ValueNotifier<int>(0);
     return Consumer(
       builder: (_, WidgetRef ref, __) {
         final adminAssetsWatcher = ref.watch(adminAssetsProvider);
@@ -38,7 +40,7 @@ class ImageRandomizerShowcase extends StatelessWidget {
                       }
                     },
                     child: OdinImageNetwork(
-                      source: adminAssets.backgroundImages[index],
+                      source: adminAssets.backgroundImages[index].toString(),
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -62,7 +64,9 @@ class ImageRandomizerShowcase extends StatelessWidget {
                             return GestureDetector(
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
-                                    vertical: 5, horizontal: 5),
+                                  vertical: 5,
+                                  horizontal: 5,
+                                ),
                                 child: ValueListenableBuilder(
                                   valueListenable: currentPage,
                                   builder:
@@ -102,7 +106,7 @@ class ImageRandomizerShowcase extends StatelessWidget {
           ),
           error: (error, stackTrace) {
             return const Center(
-              child: OdinText(text: "error"),
+              child: OdinText(text: 'error'),
             );
           },
         );

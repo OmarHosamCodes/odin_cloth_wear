@@ -1,6 +1,8 @@
-import '/library.dart';
+import 'package:odin_cloth_wear/library.dart';
 
+/// Routing Controller.
 class RoutingController {
+  /// Routing Controller.
   static final router = GoRouter(
     initialLocation: Routes.home,
     routes: [
@@ -26,8 +28,6 @@ class RoutingController {
         // },
       ),
 
-      //TODO:
-
       GoRoute(
         name: Routes.cartRoot,
         path: Routes.cart,
@@ -41,7 +41,7 @@ class RoutingController {
       GoRoute(
         path: Routes.pageNotFound,
         builder: (context, state) => const PageNotFoundScreen(),
-      )
+      ),
     ],
   );
 }

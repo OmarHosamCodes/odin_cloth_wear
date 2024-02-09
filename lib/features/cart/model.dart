@@ -1,8 +1,10 @@
-import '/library.dart';
+import 'package:odin_cloth_wear/library.dart';
 
 part 'model.g.dart';
 
 @HiveType(typeId: 0)
+
+/// A class that represents a cart item.
 class CartItem {
   /// Creates an [CartItem]
   const CartItem({

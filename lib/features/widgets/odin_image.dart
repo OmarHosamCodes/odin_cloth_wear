@@ -1,19 +1,29 @@
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:odin_cloth_wear/library.dart';
 
-import '/library.dart';
-
+/// A widget that displays an SVG image from a network source.
+/// If the image fails to load, it displays a fallback icon.
 class OdinImageSVG extends StatelessWidget {
+  /// A widget that displays an SVG image from a network source.
   const OdinImageSVG({
-    super.key,
     required this.source,
+    super.key,
     this.width,
     this.height,
     this.fallbackIcon = EvaIcons.alertTriangleOutline,
   });
+
+  /// The network URL of the SVG image.
   final String? source;
+
+  /// The width of the image.
   final double? width;
+
+  /// The height of the image.
   final double? height;
+
+  /// The fallback icon to display if the image fails to load.
   final IconData? fallbackIcon;
+
   @override
   Widget build(BuildContext context) {
     return SvgPicture.network(
@@ -24,13 +34,14 @@ class OdinImageSVG extends StatelessWidget {
         fallbackIcon,
         color: Colors.white,
       ),
-      fit: BoxFit.contain,
     );
   }
 }
 
-//remove fade
+/// A widget that displays an image from a network source using caching.
+/// If the image fails to load, it displays a fallback icon.
 class OdinImageNetwork extends StatelessWidget {
+  /// A widget that displays an image from a network source using caching.
   const OdinImageNetwork({
     super.key,
     this.source,
@@ -40,12 +51,25 @@ class OdinImageNetwork extends StatelessWidget {
     this.fit,
     this.color,
   });
+
+  /// The network URL of the image.
   final String? source;
+
+  /// The width of the image.
   final double? width;
+
+  /// The height of the image.
   final double? height;
+
+  /// The fallback icon to display if the image fails to load.
   final IconData? fallbackIcon;
+
+  /// The fit of the image within its container.
   final BoxFit? fit;
+
+  /// The color to apply to the image.
   final Color? color;
+
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
@@ -69,7 +93,10 @@ class OdinImageNetwork extends StatelessWidget {
   }
 }
 
+/// A widget that displays an image from an asset source.
+/// If the image fails to load, it displays a fallback icon.
 class OdinImageAsset extends StatelessWidget {
+  /// A widget that displays an image from an asset source.
   const OdinImageAsset({
     super.key,
     this.source,
@@ -78,11 +105,22 @@ class OdinImageAsset extends StatelessWidget {
     this.fallbackIcon = EvaIcons.alertTriangleOutline,
     this.fit,
   });
+
+  /// The asset path of the image.
   final String? source;
+
+  /// The width of the image.
   final double? width;
+
+  /// The height of the image.
   final double? height;
+
+  /// The fallback icon to display if the image fails to load.
   final IconData? fallbackIcon;
+
+  /// The fit of the image within its container.
   final BoxFit? fit;
+
   @override
   Widget build(BuildContext context) {
     return Image.asset(
