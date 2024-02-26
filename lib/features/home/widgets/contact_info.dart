@@ -1,34 +1,33 @@
 // ignore_for_file: avoid_dynamic_calls
 
+import 'package:odin_cloth_wear/constants/private_constants.dart';
 import 'package:odin_cloth_wear/library.dart';
 
 /// A [StatelessWidget] that displays the contact info of the admin.
 class ContactInfo extends StatelessWidget {
   /// A [StatelessWidget] that displays the contact info of the admin.
-  const ContactInfo({required this.adminAssets, super.key});
+  const ContactInfo({required this.assets, super.key});
 
-  /// The [AdminAssets] to display.
-  final AdminAssets adminAssets;
+  /// The [Assets] to display.
+  final Assets assets;
 
   List<Widget> get _socials {
     final socials = <Widget>[];
-
-    adminAssets.social.forEach(
-      (key, value) {
-        socials.add(
-          InkWell(
-            onTap: () => launchURL(value[1] as String),
-            child: OdinImageNetwork(
-              source: value[0] as String,
-              width: 26,
-              height: 26,
-              fit: BoxFit.contain,
-              color: ColorConstants.primaryColor,
-            ),
+    for (final social in assets.social.entries) {
+      socials.add(
+        InkWell(
+          onTap: () => launchURL(social.value[1] as String),
+          child: OdinImageNetwork(
+            source: social.value[0] as String,
+            width: 26,
+            height: 26,
+            fit: BoxFit.contain,
+            color: ColorConstants.primaryColor,
           ),
-        );
-      },
-    );
+        ),
+      );
+    }
+
     return socials;
   }
 
@@ -48,37 +47,51 @@ class ContactInfo extends StatelessWidget {
             textColor: ColorConstants.primaryColor,
             textWeight: FontWeight.bold,
           ),
-          const SizedBox(
-            height: 10,
+          const Gap(),
+          InkWell(
+            onTap: () => context.pushNamed(
+              Routes.contactRoot,
+              extra: PrivateConstants.aboutUs,
+            ),
+            child: const OdinText(
+              text: 'We are ODIN',
+              type: OdinTextType.subtitle,
+            ),
           ),
-          const OdinText(
-            text: 'We are ODIN',
-            type: OdinTextType.subtitle,
+          const Gap(),
+          InkWell(
+            onTap: () => context.pushNamed(
+              Routes.contactRoot,
+              extra: PrivateConstants.deliveryPolicy,
+            ),
+            child: const OdinText(
+              text: 'Delivery and returns policy',
+              type: OdinTextType.subtitle,
+            ),
           ),
-          const SizedBox(
-            height: 10,
+          const Gap(),
+          InkWell(
+            onTap: () => context.pushNamed(
+              Routes.contactRoot,
+              extra: PrivateConstants.privacyPolicy,
+            ),
+            child: const OdinText(
+              text: 'Privacy policy',
+              type: OdinTextType.subtitle,
+            ),
           ),
-          const OdinText(
-            text: 'Delivery and returns policy',
-            type: OdinTextType.subtitle,
+          const Gap(),
+          InkWell(
+            onTap: () => context.pushNamed(
+              Routes.contactRoot,
+              extra: PrivateConstants.termsAndConditions,
+            ),
+            child: const OdinText(
+              text: 'Terms and conditions',
+              type: OdinTextType.subtitle,
+            ),
           ),
-          const SizedBox(
-            height: 10,
-          ),
-          const OdinText(
-            text: 'Privacy policy',
-            type: OdinTextType.subtitle,
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          const OdinText(
-            text: 'Terms and conditions',
-            type: OdinTextType.subtitle,
-          ),
-          const SizedBox(
-            height: 10,
-          ),
+          const Gap(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -100,15 +113,28 @@ class ContactInfo extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(
-            height: 10,
-          ),
+          const Gap(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: _socials,
           ),
         ],
       ),
+    );
+  }
+}
+
+/// A [StatelessWidget] that displays a gap.
+class Gap extends StatelessWidget {
+  /// A [StatelessWidget] that displays a gap.
+  const Gap({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return const SizedBox(
+      height: 20,
     );
   }
 }

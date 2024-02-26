@@ -20,4 +20,22 @@ class Routes {
 
   /// The route for the page not found screen.
   static const String pageNotFound = '/404';
+
+  /// The route for the checkout screen.
+  static const String checkout = '/checkout';
+
+  /// The root route for the checkout screen.
+  static const String checkoutRoot = 'checkout';
+
+  /// The route for search screen.
+  static const String search = '/search';
+
+  /// The root route for the search screen.
+  static const String searchRoot = 'search';
+
+  /// The root route for the contact screen.
+  static const String contactRoot = 'contact';
+
+  /// The route for the contact screen.
+  static const String contact = '/contact';
 }

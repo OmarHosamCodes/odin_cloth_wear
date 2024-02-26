@@ -13,9 +13,9 @@ class ImageRandomizerShowcase extends StatelessWidget {
     final currentPage = ValueNotifier<int>(0);
     return Consumer(
       builder: (_, WidgetRef ref, __) {
-        final adminAssetsWatcher = ref.watch(adminAssetsProvider);
-        return adminAssetsWatcher.when(
-          data: (adminAssets) {
+        final itemsByTag = ref.watch(filteredItemsByTagProvider('top'));
+        return itemsByTag.when(
+          data: (items) {
             return Stack(
               alignment: Alignment.center,
               children: [
@@ -23,27 +23,30 @@ class ImageRandomizerShowcase extends StatelessWidget {
                   scrollBehavior: const ScrollBehavior()
                       .copyWith(overscroll: false, scrollbars: false),
                   controller: pageController,
-                  itemCount: adminAssets.backgroundImages.length,
+                  itemCount: items.length,
                   onPageChanged: (index) => currentPage.value = index,
-                  itemBuilder: (context, index) => GestureDetector(
-                    onPanUpdate: (details) {
-                      if (details.delta.dx > 0) {
-                        pageController.previousPage(
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeIn,
-                        );
-                      } else {
-                        pageController.nextPage(
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeIn,
-                        );
-                      }
-                    },
-                    child: OdinImageNetwork(
-                      source: adminAssets.backgroundImages[index].toString(),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+                  itemBuilder: (context, index) {
+                    final item = items[index];
+                    return GestureDetector(
+                      onPanUpdate: (details) {
+                        if (details.delta.dx > 0) {
+                          pageController.previousPage(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeIn,
+                          );
+                        } else {
+                          pageController.nextPage(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.easeIn,
+                          );
+                        }
+                      },
+                      child: OdinImageNetwork(
+                        source: item.images!.first.toString(),
+                        fit: BoxFit.cover,
+                      ),
+                    );
+                  },
                 ),
                 Align(
                   alignment: Alignment.bottomCenter,
@@ -52,48 +55,42 @@ class ImageRandomizerShowcase extends StatelessWidget {
                     builder: (context, snapshot) {
                       if (!snapshot.hasData ||
                           !snapshot.data! ||
-                          adminAssets.backgroundImages.length == 1 ||
+                          items.length == 1 ||
                           snapshot.connectionState == ConnectionState.waiting) {
                         return const SizedBox();
                       }
+                      final children = <Widget>[];
+                      for (var i = 0; i < items.length; i++) {
+                        children.add(
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 5,
+                              horizontal: 5,
+                            ),
+                            child: ValueListenableBuilder(
+                              valueListenable: currentPage,
+                              builder:
+                                  (context, pageControllerPageWatcher, _) =>
+                                      AnimatedContainer(
+                                duration: const Duration(milliseconds: 500),
+                                width: 10,
+                                height: 10,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: pageControllerPageWatcher == i
+                                      ? ColorConstants.primaryColor
+                                      : ColorConstants.primaryColor
+                                          .withOpacity(0.5),
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      }
+
                       return Row(
                         mainAxisSize: MainAxisSize.min,
-                        children: List.generate(
-                          adminAssets.backgroundImages.length,
-                          (imagesIndex) {
-                            return GestureDetector(
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 5,
-                                  horizontal: 5,
-                                ),
-                                child: ValueListenableBuilder(
-                                  valueListenable: currentPage,
-                                  builder:
-                                      (context, pageControllerPageWatcher, _) =>
-                                          AnimatedContainer(
-                                    duration: const Duration(milliseconds: 500),
-                                    width: 10,
-                                    height: 10,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: pageControllerPageWatcher ==
-                                              imagesIndex
-                                          ? const Color(0xffF7F7F7)
-                                          : const Color(0xffF7F7F7)
-                                              .withOpacity(0.5),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              onTap: () => pageController.animateToPage(
-                                imagesIndex,
-                                duration: const Duration(milliseconds: 500),
-                                curve: Curves.ease,
-                              ),
-                            );
-                          },
-                        ),
+                        children: children,
                       );
                     },
                   ),

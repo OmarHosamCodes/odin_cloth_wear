@@ -8,20 +8,6 @@ class CartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const OdinText(
-          text: 'Cart',
-          type: OdinTextType.custom,
-          textColor: ColorConstants.seccoundaryColor,
-          textSize: 14,
-          textWeight: FontWeight.bold,
-        ),
-        centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(EvaIcons.arrowBack),
-          onPressed: () => context.goNamed(Routes.homeRoot),
-        ),
-      ),
       body: CustomScrollView(
         slivers: [
           Consumer(
@@ -114,23 +100,21 @@ class CartScreen extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             sliver: Consumer(
               builder: (_, WidgetRef ref, __) {
-                final itemsWatcher = ref.watch(itemsProvider);
+                final itemsByTags =
+                    ref.watch(filteredItemsByTagProvider('cart'));
 
-                return itemsWatcher.when(
-                  data: (value) {
-                    final hotItems = value
-                        .where((item) => item.tags!.contains('hot'))
-                        .toList();
+                return itemsByTags.maybeWhen(
+                  data: (items) {
                     return SliverGrid.builder(
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
+                        crossAxisCount: 2,
                         mainAxisSpacing: 16,
                         crossAxisSpacing: 16,
                         childAspectRatio: .5,
                       ),
                       itemBuilder: (context, index) {
-                        final item = hotItems[index];
+                        final item = items[index];
                         return Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -154,48 +138,26 @@ class CartScreen extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(height: 8),
-                            OdinElevatedButton(
-                              onPressed: () => openQuickAddSheet(
-                                context,
-                                item: item,
-                                ref: ref,
+                            SizedBox(
+                              width: double.infinity,
+                              child: OdinElevatedButton(
+                                onPressed: () => openQuickAddSheet(
+                                  context,
+                                  item: item,
+                                  ref: ref,
+                                ),
+                                child: const OdinText(text: 'Quick Add'),
                               ),
-                              child: const OdinText(text: 'Quick Add'),
                             ),
                           ],
                         );
                       },
-                      itemCount: hotItems.length,
+                      itemCount: items.length,
                     );
                   },
-                  loading: () => const SliverToBoxAdapter(
-                    child: OdinShimmer(
-                      height: 100,
-                      width: 100,
-                    ),
+                  orElse: () => const SliverToBoxAdapter(
+                    child: OdinLoader(),
                   ),
-                  error: (error, stackTrace) => const SliverToBoxAdapter(
-                    child: OdinText(
-                      text: 'Error loading items',
-                      type: OdinTextType.custom,
-                      textColor: ColorConstants.primaryColor,
-                      textSize: 14,
-                      textWeight: FontWeight.bold,
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-          SliverToBoxAdapter(
-            child: Consumer(
-              builder: (_, WidgetRef ref, __) {
-                final adminAssets = ref.watch(adminAssetsProvider);
-                return adminAssets.maybeWhen(
-                  data: (adminAssets) {
-                    return ContactInfo(adminAssets: adminAssets);
-                  },
-                  orElse: () => const SizedBox(),
                 );
               },
             ),

@@ -21,36 +21,6 @@ class ItemRepository {
   /// [Item]s collection
   CollectionReference get _itemsCollection => firestore.collection(collection);
 
-  /// POST [Item]
-  Future<ResponseStatus> post(Item item) async {
-    try {
-      await _itemsCollection.add(item.toJson());
-      return ResponseStatus.success;
-    } catch (e) {
-      return ResponseStatus.error;
-    }
-  }
-
-  /// PUT [Item]
-  Future<ResponseStatus> put(Item item) async {
-    try {
-      await _itemsCollection.doc(item.id).update(item.toJson());
-      return ResponseStatus.success;
-    } catch (e) {
-      return ResponseStatus.error;
-    }
-  }
-
-  /// DELETE [Item]
-  Future<ResponseStatus> delete(String itemId) async {
-    try {
-      await _itemsCollection.doc(itemId).delete();
-      return ResponseStatus.success;
-    } catch (e) {
-      return ResponseStatus.error;
-    }
-  }
-
   /// GET [Item] by id
   Future<(Item?, ResponseStatus)> getById(String? itemId) async {
     if (itemId == null) {
@@ -66,6 +36,51 @@ class ItemRepository {
         return (null, ResponseStatus.error);
       }
     }
+  }
+
+  /// GET [Item]s by category
+  Future<List<Item>> getByCategory(String category) {
+    return _itemsCollection
+        .where('category', isLessThanOrEqualTo: category)
+        .get()
+        .then(
+          (value) => value.docs
+              .map((doc) => Item.fromJson(doc.data()! as Map<String, dynamic>))
+              .toList(),
+        );
+  }
+
+  /// GET [Item]s by tag
+  Future<List<Item>> getByTag(String tag) {
+    return _itemsCollection.where('tags', arrayContains: tag).get().then(
+          (value) => value.docs
+              .map((doc) => Item.fromJson(doc.data()! as Map<String, dynamic>))
+              .toList(),
+        );
+  }
+
+  /// GET [Item]s by name
+  Future<List<Item>> getByName(String name) {
+    return _itemsCollection.where('name', isLessThanOrEqualTo: name).get().then(
+          (value) => value.docs
+              .map((doc) => Item.fromJson(doc.data()! as Map<String, dynamic>))
+              .toList(),
+        );
+  }
+
+  /// Get [Item]s by search query
+  Future<List<Item>> getByQuery(String query) async {
+    final searchQuery = <Item>{};
+    final tagsQuery = await getByTag(query);
+    final nameQuery = await getByName(query);
+    final categoryQuery = await getByCategory(query);
+
+    searchQuery
+      ..addAll(tagsQuery)
+      ..addAll(nameQuery)
+      ..addAll(categoryQuery);
+
+    return searchQuery.toList();
   }
 
   /// GET [Item]s

@@ -19,7 +19,7 @@ final itemProvider = FutureProvider.family<Item?, String?>(
       return null;
     } else {
       final item = await ref.read(itemRepositoryProvider).getById(itemId);
-      return Future.value(item.$1);
+      return item.$1;
     }
   },
 );
@@ -28,6 +28,40 @@ final itemProvider = FutureProvider.family<Item?, String?>(
 final itemsProvider = FutureProvider<List<Item>>(
   (ref) async {
     final items = await ref.read(itemRepositoryProvider).get();
-    return Future.value(items);
+    return items;
+  },
+);
+
+/// Provider for a list of [Item] instances filtered by category.
+final filteredItemsByCategoryProvider =
+    FutureProvider.family<List<Item>, String>(
+  (ref, category) async {
+    final items =
+        await ref.read(itemRepositoryProvider).getByCategory(category);
+    return items;
+  },
+);
+
+/// Provider for a list of [Item] instances filtered by tag.
+final filteredItemsByTagProvider = FutureProvider.family<List<Item>, String>(
+  (ref, tag) async {
+    final items = await ref.read(itemRepositoryProvider).getByTag(tag);
+    return items;
+  },
+);
+
+/// Provider for a list of [Item] instances filtered by name.
+final filteredItemsByNameProvider = FutureProvider.family<List<Item>, String>(
+  (ref, name) async {
+    final items = await ref.read(itemRepositoryProvider).getByName(name);
+    return items;
+  },
+);
+
+/// Provider for a list of [Item] instances filtered by query.
+final filteredItemsByQueryProvider = FutureProvider.family<List<Item>, String>(
+  (ref, query) async {
+    final items = await ref.read(itemRepositoryProvider).getByQuery(query);
+    return items;
   },
 );

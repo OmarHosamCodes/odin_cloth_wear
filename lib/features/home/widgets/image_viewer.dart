@@ -58,12 +58,10 @@ class ImageViewer extends StatelessWidget {
               },
               onTap: () => context.pushNamed(
                 Routes.itemRoot,
-                pathParameters: {
+                pathParameters: <String, String>{
                   'id': item.id!,
                 },
-                queryParameters: {
-                  'id': item.id,
-                },
+                extra: item,
               ),
               child: OdinImageNetwork(
                 source: item.images![index].toString(),
@@ -87,87 +85,39 @@ class ImageViewer extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: List.generate(
                   item.images!.length,
-                  (imagesIndex) {
-                    return GestureDetector(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 5,
-                          horizontal: 5,
-                        ),
-                        child: ValueListenableBuilder(
-                          valueListenable: currentPage,
-                          builder: (context, pageControllerPageWatcher, _) =>
-                              AnimatedContainer(
-                            duration: const Duration(milliseconds: 500),
-                            width: 10,
-                            height: 10,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: pageControllerPageWatcher == imagesIndex
-                                  ? ColorConstants.primaryColor
-                                  : ColorConstants.primaryColor
-                                      .withOpacity(0.5),
-                            ),
+                  (imagesIndex) => GestureDetector(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 5,
+                        horizontal: 5,
+                      ),
+                      child: ValueListenableBuilder(
+                        valueListenable: currentPage,
+                        builder: (context, pageControllerPageWatcher, _) =>
+                            AnimatedContainer(
+                          duration: const Duration(milliseconds: 500),
+                          width: 10,
+                          height: 10,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: pageControllerPageWatcher == imagesIndex
+                                ? ColorConstants.primaryColor
+                                : ColorConstants.primaryColor.withOpacity(0.5),
                           ),
                         ),
                       ),
-                      onTap: () => pageController.animateToPage(
-                        imagesIndex,
-                        duration: const Duration(milliseconds: 500),
-                        curve: Curves.ease,
-                      ),
-                    );
-                  },
+                    ),
+                    onTap: () => pageController.animateToPage(
+                      imagesIndex,
+                      duration: const Duration(milliseconds: 500),
+                      curve: Curves.ease,
+                    ),
+                  ),
                 ),
               );
             },
           ),
         ),
-        // Visibility(
-        //   visible: showDetails,
-        //   child: Align(
-        //     alignment: Alignment.bottomLeft,
-        //     child: Container(
-        //       margin: const EdgeInsets.all(4),
-        //       padding: const EdgeInsets.all(8),
-        //       decoration: BoxDecoration(
-        //         borderRadius: BorderRadius.circular(4),
-        //         color: const Color(0x960F0F0F),
-        //         boxShadow: [
-        //           BoxShadow(
-        //             color: Colors.black.withOpacity(0.5),
-        //             spreadRadius: 1,
-        //             blurRadius: 2,
-        //             offset: const Offset(0, 1), // changes position of shadow
-        //           ),
-        //         ],
-        //       ),
-        //       child: Column(
-        //         mainAxisSize: MainAxisSize.min,
-        //         crossAxisAlignment: CrossAxisAlignment.start,
-        //         mainAxisAlignment: MainAxisAlignment.start,
-        //         children: [
-        //           OdinText(
-        //             text: item.name!,
-        //             type: OdinTextType.title,
-        //           ),
-        //           OdinText(
-        //             text: item.category!,
-        //             type: OdinTextType.subtitle,
-        //           ),
-        //           const SizedBox(
-        //             width: 10,
-        //             child: Divider(),
-        //           ),
-        //           OdinText(
-        //             text: "${item.price} EGP",
-        //             type: OdinTextType.price,
-        //           ),
-        //         ],
-        //       ),
-        //     ),
-        //   ),
-        // ),
       ],
     );
   }

@@ -31,7 +31,7 @@ class OdinClothWear extends StatelessWidget {
           const Breakpoint(start: 801, end: double.infinity, name: DESKTOP),
         ],
       ),
-      routerConfig: RoutingController.router,
+      routerConfig: RoutingRepository.router,
     );
   }
 }

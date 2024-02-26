@@ -9,16 +9,10 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
-    final scrollController = ScrollController();
-    bool isDesktop() {
-      if (ResponsiveBreakpoints.of(context).smallerThan(DESKTOP)) return false;
-      return true;
-    }
 
-    bool isTablet() {
-      if (ResponsiveBreakpoints.of(context).smallerThan(TABLET)) return false;
-      return true;
-    }
+    bool isDesktop() => !ResponsiveBreakpoints.of(context).smallerThan(DESKTOP);
+
+    bool isTablet() => !ResponsiveBreakpoints.of(context).smallerThan(TABLET);
 
     int crossAxisCount() {
       if (isDesktop()) return 3;
@@ -26,9 +20,8 @@ class HomeScreen extends StatelessWidget {
       return 1;
     }
 
-    return HomeAdvancedDrawer(
-      child: CustomScrollView(
-        controller: scrollController,
+    return Scaffold(
+      body: CustomScrollView(
         slivers: [
           SliverToBoxAdapter(
             child: SizedBox(
@@ -38,26 +31,26 @@ class HomeScreen extends StatelessWidget {
           ),
           SliverPadding(
             padding: EdgeInsets.symmetric(horizontal: width * .05),
-            sliver: SliverGrid(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: crossAxisCount(),
-                mainAxisSpacing: 10,
-                crossAxisSpacing: 10,
-                childAspectRatio: 0.70,
-              ),
-              delegate: SliverChildBuilderDelegate(
-                (_, int index) {
-                  return Consumer(
-                    builder: (_, WidgetRef ref, __) {
-                      final items = ref.watch(itemsProvider);
-
-                      return items.when(
-                        data: (items) {
+            sliver: Consumer(
+              builder: (_, WidgetRef ref, __) {
+                final items = ref.watch(itemsProvider);
+                return items.maybeWhen(
+                  data: (items) {
+                    return SliverGrid(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: crossAxisCount(),
+                        mainAxisSpacing: 10,
+                        crossAxisSpacing: 10,
+                        childAspectRatio: .6,
+                      ),
+                      delegate: SliverChildBuilderDelegate(
+                        childCount: items.length,
+                        (_, int index) {
                           final item = items[index];
                           return Column(
                             children: [
                               AspectRatio(
-                                aspectRatio: 4 / 5,
+                                aspectRatio: 2 / 3,
                                 child: Container(
                                   decoration: BoxDecoration(
                                     boxShadow: [
@@ -71,10 +64,7 @@ class HomeScreen extends StatelessWidget {
                                   child: Card(
                                     clipBehavior: Clip.antiAlias,
                                     color: ColorConstants.seccoundaryColor,
-                                    child: Hero(
-                                      tag: item.id!,
-                                      child: ImageViewer(item: item),
-                                    ),
+                                    child: ImageViewer(item: item),
                                   ),
                                 ),
                               ),
@@ -100,37 +90,23 @@ class HomeScreen extends StatelessWidget {
                             ],
                           );
                         },
-                        loading: () => const Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                        error: (error, stackTrace) {
-                          return Center(
-                            child: Text(error.toString()),
-                          );
-                        },
-                      );
-                    },
-                  );
-                },
-                childCount: 2,
-              ),
+                      ),
+                    );
+                  },
+                  orElse: () => const SliverToBoxAdapter(child: OdinLoader()),
+                );
+              },
             ),
           ),
           SliverToBoxAdapter(
             child: Consumer(
               builder: (_, WidgetRef ref, __) {
-                final adminAssets = ref.watch(adminAssetsProvider);
-                return adminAssets.when(
-                  data: (adminAssets) {
-                    return ContactInfo(adminAssets: adminAssets);
+                final assetsWatcher = ref.watch(assetsProvider);
+                return assetsWatcher.maybeWhen(
+                  data: (assets) {
+                    return ContactInfo(assets: assets);
                   },
-                  loading: () => OdinShimmer(
-                    height: height,
-                    width: width,
-                  ),
-                  error: (error, stackTrace) => const Center(
-                    child: OdinText(text: 'Contact Info'),
-                  ),
+                  orElse: () => const OdinLoader(),
                 );
               },
             ),

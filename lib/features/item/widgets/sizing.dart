@@ -68,20 +68,16 @@ class Sizing extends StatelessWidget {
           left: 0,
           child: Consumer(
             builder: (_, WidgetRef ref, __) {
-              final adminAssetsWatcher = ref.watch(adminAssetsProvider);
-              return adminAssetsWatcher.when(
-                data: (adminAssets) {
+              final assetsWatcher = ref.watch(assetsProvider);
+              return assetsWatcher.when(
+                data: (assets) {
                   return OdinImageNetwork(
                     width: 60,
                     height: 60,
-                    source: adminAssets.logo,
+                    source: assets.logo,
                   );
                 },
-                loading: () => const OdinShimmer(
-                  height: 40,
-                  width: 40,
-                  type: OdinShimmerType.circle,
-                ),
+                loading: OdinLoader.new,
                 error: (error, stackTrace) {
                   return const Center(
                     child: OdinText(text: 'error'),
