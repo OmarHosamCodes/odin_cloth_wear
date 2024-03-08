@@ -1,8 +1,8 @@
 import 'package:odin_cloth_wear/library.dart';
 
-/// A [ConsumerWidget] that displays a [ImageRandomizerShowcase].
+/// A [StatelessWidget] that displays a [ImageRandomizerShowcase].
 class ImageRandomizerShowcase extends StatelessWidget {
-  /// A [ConsumerWidget] that displays a [ImageRandomizerShowcase].
+  /// A [StatelessWidget] that displays a [ImageRandomizerShowcase].
   const ImageRandomizerShowcase({
     super.key,
   });
@@ -10,102 +10,126 @@ class ImageRandomizerShowcase extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final pageController = PageController();
-    final currentPage = ValueNotifier<int>(0);
     return Consumer(
       builder: (_, WidgetRef ref, __) {
         final itemsByTag = ref.watch(filteredItemsByTagProvider('top'));
-        return itemsByTag.when(
+
+        return itemsByTag.maybeWhen(
           data: (items) {
             return Stack(
               alignment: Alignment.center,
               children: [
-                PageView.builder(
-                  scrollBehavior: const ScrollBehavior()
-                      .copyWith(overscroll: false, scrollbars: false),
-                  controller: pageController,
-                  itemCount: items.length,
-                  onPageChanged: (index) => currentPage.value = index,
-                  itemBuilder: (context, index) {
-                    final item = items[index];
-                    return GestureDetector(
-                      onPanUpdate: (details) {
-                        if (details.delta.dx > 0) {
-                          pageController.previousPage(
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.easeIn,
-                          );
-                        } else {
-                          pageController.nextPage(
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.easeIn,
-                          );
-                        }
-                      },
-                      child: OdinImageNetwork(
-                        source: item.images!.first.toString(),
-                        fit: BoxFit.cover,
-                      ),
-                    );
-                  },
-                ),
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: FutureBuilder<bool>(
-                    future: Future.value(context.mounted),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData ||
-                          !snapshot.data! ||
-                          items.length == 1 ||
-                          snapshot.connectionState == ConnectionState.waiting) {
-                        return const SizedBox();
-                      }
-                      final children = <Widget>[];
-                      for (var i = 0; i < items.length; i++) {
-                        children.add(
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 5,
-                              horizontal: 5,
-                            ),
-                            child: ValueListenableBuilder(
-                              valueListenable: currentPage,
-                              builder:
-                                  (context, pageControllerPageWatcher, _) =>
-                                      AnimatedContainer(
-                                duration: const Duration(milliseconds: 500),
-                                width: 10,
-                                height: 10,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: pageControllerPageWatcher == i
-                                      ? ColorConstants.primaryColor
-                                      : ColorConstants.primaryColor
-                                          .withOpacity(0.5),
-                                ),
-                              ),
-                            ),
+                LoopingPageView(items: items, pageController: pageController),
+                Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                  color: ColorConstants.overlayColor,
+                  child: Center(
+                    child: InkWell(
+                      onTap: () {},
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 10,
+                        ),
+                        height: 50,
+                        width: 150,
+                        decoration: BoxDecoration(
+                          color:
+                              ColorConstants.seccoundaryColor.withOpacity(.3),
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color: ColorConstants.primaryColor,
                           ),
-                        );
-                      }
-
-                      return Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: children,
-                      );
-                    },
+                        ),
+                        child: const FittedBox(
+                          child: OdinText(
+                            text: 'Shop Now',
+                            type: OdinTextType.custom,
+                            textColor: ColorConstants.primaryColor,
+                            textSize: 30,
+                            textWeight: FontWeight.w100,
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ],
             );
           },
-          loading: () => const Center(
-            child: CircularProgressIndicator(),
+          orElse: () => const Center(
+            child: OdinLoader(),
           ),
-          error: (error, stackTrace) {
-            return const Center(
-              child: OdinText(text: 'error'),
-            );
-          },
+        );
+      },
+    );
+  }
+}
+
+/// A [StatefulWidget] that displays a [LoopingPageView].
+class LoopingPageView extends StatefulWidget {
+  /// A [StatefulWidget] that displays a [LoopingPageView].
+  const LoopingPageView({
+    required this.items,
+    required this.pageController,
+    super.key,
+  });
+
+  /// [LoopingPageView] items
+  final List<Item> items;
+
+  /// [LoopingPageView] page controller
+  final PageController pageController;
+
+  @override
+  LoopingPageViewState createState() => LoopingPageViewState();
+}
+
+/// A [State] of [LoopingPageView].
+class LoopingPageViewState extends State<LoopingPageView> {
+  late Timer _timer;
+  int _currentPage = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _startTimer();
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  void _startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 3), (_) {
+      if (_currentPage < widget.items.length - 1) {
+        _currentPage++;
+      } else {
+        _currentPage = 0;
+      }
+      widget.pageController.animateToPage(
+        _currentPage,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PageView.builder(
+      scrollBehavior:
+          const ScrollBehavior().copyWith(overscroll: false, scrollbars: false),
+      controller: widget.pageController,
+      itemCount: widget.items.length,
+      itemBuilder: (context, index) {
+        final item = widget.items[index];
+        return OdinImageNetwork(
+          source: item.images!.first.toString(),
+          fit: BoxFit.cover,
         );
       },
     );

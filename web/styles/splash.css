@@ -2,7 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    color: #ffff;
+    color: #f7f7f7;
     font-weight: 100;
     letter-spacing: -.05em;
     text-decoration: none;
@@ -14,7 +14,7 @@ body {
     background-color: #f7f7f7;
     width: 100%;
     height: 100%;
-    color: #ffffff70;
+    color: #f7f7f7;
 }
 
 
@@ -37,14 +37,14 @@ body {
     top: 0;
     width: 50%;
     height: 100%;
-    background-color: #161616;
-    border-right: 1px solid #161616;
+    background-color: #0f0f0f;
+    border-right: 1px solid #0f0f0f;
     transition: transform 1s;
 }
 
 .left.active {
     transform: translateX(-100%);
-    border-right: 1px solid #ffffff;
+    border-right: 1px solid #f7f7f7;
 }
 
 
@@ -54,14 +54,14 @@ body {
     top: 0;
     width: 50%;
     height: 100%;
-    background-color: #161616;
-    border-left: 1px solid #161616;
+    background-color: #0f0f0f;
+    border-left: 1px solid #0f0f0f;
     transition: transform 1s;
 }
 
 .right.active {
     transform: translateX(100%);
-    border-left: 1px solid #ffffff;
+    border-left: 1px solid #f7f7f7;
 }
 
 .progress__bar {
@@ -71,7 +71,7 @@ body {
     transform: translateX(-50%);
     width: 1px;
     height: 0%;
-    background-color: #0f0f0f;
+    background-color: #f7f7f7;
 
     transition: height 1s;
 }

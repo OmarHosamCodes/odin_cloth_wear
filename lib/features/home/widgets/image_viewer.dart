@@ -34,10 +34,7 @@ class ImageViewer extends StatelessWidget {
           itemBuilder: (context, index) {
             return GestureDetector(
               onPanUpdate: (details) {
-                if (details.delta.dx > 0) {
-                  if (currentPage.value == 0) {
-                    return;
-                  }
+                if (details.delta.dx > 0 && currentPage.value != 0) {
                   pageController.animateToPage(
                     currentPage.value - 1,
                     duration: const Duration(milliseconds: 500),
@@ -45,10 +42,8 @@ class ImageViewer extends StatelessWidget {
                   );
                 }
 
-                if (details.delta.dx < 0) {
-                  if (currentPage.value == item.images!.length - 1) {
-                    return;
-                  }
+                if (details.delta.dx < 0 &&
+                    currentPage.value != item.images!.length - 1) {
                   pageController.animateToPage(
                     currentPage.value + 1,
                     duration: const Duration(milliseconds: 500),
@@ -56,7 +51,7 @@ class ImageViewer extends StatelessWidget {
                   );
                 }
               },
-              onTap: () => context.pushNamed(
+              onTap: () => context.goNamed(
                 Routes.itemRoot,
                 pathParameters: <String, String>{
                   'id': item.id!,

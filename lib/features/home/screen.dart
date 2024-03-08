@@ -68,23 +68,30 @@ class HomeScreen extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              OdinChip(
-                                label: Row(
-                                  children: [
-                                    OdinText(text: item.name!),
-                                    const Padding(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 5,
-                                      ),
-                                      child: SizedBox(
-                                        width: 10,
-                                        child: OdinDivider(
-                                          thickness: 2,
+                              SizedBox(
+                                width: double.infinity,
+                                child: OdinChip(
+                                  label: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      OdinText(text: item.name!),
+                                      const Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 5,
+                                        ),
+                                        child: SizedBox(
+                                          width: 10,
+                                          child: OdinDivider(
+                                            thickness: 2,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    OdinText(text: item.price.toString()),
-                                  ],
+                                      OdinText(
+                                        text: item.price.toString(),
+                                        type: OdinTextType.price,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ],

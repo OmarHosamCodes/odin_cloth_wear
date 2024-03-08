@@ -36,6 +36,13 @@ class RoutingRepository {
             path: Routes.cart,
             builder: (context, state) => const CartScreen(),
           ),
+          GoRoute(
+            name: Routes.checkoutRoot,
+            path: Routes.checkout,
+            builder: (context, state) => CheckoutScreen(
+              cart: state.extra! as List<CartItem>,
+            ),
+          ),
         ],
       ),
       GoRoute(
@@ -45,12 +52,6 @@ class RoutingRepository {
           info: state.extra! as String,
         ),
       ),
-
-      // GoRoute(
-      //   path: '/checkout',
-      //   pageBuilder: (context, state) => const CheckoutScreen(),
-      // ),
-
       GoRoute(
         path: Routes.pageNotFound,
         builder: (context, state) => const PageNotFoundScreen(),

@@ -5,14 +5,19 @@ class CartItemTile extends ConsumerWidget {
   /// A [ConsumerWidget] that displays a [CartItem] in a [ListTile].
   const CartItemTile({
     required this.cartItem,
+    this.showDetails = true,
     super.key,
   });
 
   /// The [CartItem] to display.
   final CartItem cartItem;
+
+  /// Whether to show the delete button.
+  final bool showDetails;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final item = ref.watch(itemProvider(cartItem.id));
+    final cartWatcher = ref.watch(cartProvider);
     return item.when(
       data: (item) {
         return ListTile(
@@ -24,7 +29,7 @@ class CartItemTile extends ConsumerWidget {
             ),
           ),
           title: OdinText(
-            text: item.name!,
+            text: cartItem.name!,
             type: OdinTextType.custom,
             textSize: 16,
             textWeight: FontWeight.w600,
@@ -34,7 +39,14 @@ class CartItemTile extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               OdinText(
-                text: '${item.price} EGP',
+                text: '${(cartItem.price! * cartWatcher.maybeWhen(
+                      data: (cart) => cart
+                          .firstWhere(
+                            (element) => element.id == item.id,
+                          )
+                          .quantity,
+                      orElse: () => 1,
+                    )).roundToDouble()} EGP',
                 type: OdinTextType.custom,
                 textSize: 12,
                 textWeight: FontWeight.w600,
@@ -88,14 +100,57 @@ class CartItemTile extends ConsumerWidget {
               ),
             ],
           ),
-          trailing: IconButton(
-            icon: const Icon(EvaIcons.trash2Outline, color: Colors.red),
-            onPressed: () async {
-              await ref.read(cartRepositoryProvider).delete(cartItem.id!);
-              ref
-                ..read(cartProvider)
-                ..invalidate(cartProvider);
-            },
+          trailing: Visibility(
+            visible: showDetails,
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Flexible(
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        icon: const Icon(EvaIcons.minus),
+                        onPressed: () {
+                          ref
+                            ..read(cartRepositoryProvider).decrement(item.id!)
+                            ..invalidate(cartProvider)
+                            ..read(cartProvider);
+                        },
+                      ),
+                      OdinText(
+                        text: cartItem.quantity.toString(),
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                      IconButton(
+                        icon: const Icon(EvaIcons.plus),
+                        onPressed: () {
+                          ref
+                            ..read(cartRepositoryProvider).increment(item.id!)
+                            ..invalidate(cartProvider)
+                            ..read(cartProvider);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                Flexible(
+                  child: IconButton(
+                    icon: const Icon(EvaIcons.trash2Outline, color: Colors.red),
+                    onPressed: () async {
+                      await ref
+                          .read(cartRepositoryProvider)
+                          .delete(cartItem.id!);
+                      ref
+                        ..read(cartProvider)
+                        ..invalidate(cartProvider);
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },

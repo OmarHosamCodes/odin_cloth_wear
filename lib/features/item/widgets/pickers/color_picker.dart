@@ -1,7 +1,7 @@
 import 'package:odin_cloth_wear/library.dart';
 
 /// A [StatelessWidget] that displays a [ColorPicker].
-class ColorPicker extends StatelessWidget {
+class ColorPicker extends ConsumerStatefulWidget {
   /// A [StatelessWidget] that displays a [ColorPicker].
   const ColorPicker({required this.item, super.key});
 
@@ -9,25 +9,42 @@ class ColorPicker extends StatelessWidget {
   final Item item;
 
   @override
-  Widget build(BuildContext context) {
-    // ignore: inference_failure_on_function_return_type
-    late final colors =
-        // ignore: inference_failure_on_function_invocation
-        item.colors!.map((color) => int.tryParse(color.toString())).toList();
+  ConsumerState<ColorPicker> createState() => _ColorPickerState();
+}
 
+class _ColorPickerState extends ConsumerState<ColorPicker> {
+  @override
+  void initState() {
+    super.initState();
+    Future(() => ref.read(colorPickerProvider.notifier).reset());
+  }
+
+  /// The [Item] colors.
+  List<int?> get colors {
+    final colors = <int?>[];
+
+    for (final color in widget.item.colors!) {
+      colors.add(int.tryParse(color.toString()));
+    }
+    return colors;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Consumer(
       builder: (_, WidgetRef ref, __) {
-        ref.watch(colorPickerProvider);
-        final selectedColor =
-            ref.read(colorPickerProvider).pickedState ?? colors.first;
+        final selectedColor = ref.watch(
+          colorPickerProvider.select((value) => value.pickedState),
+        );
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: colors.map(
-            (color) {
-              final isSelected = color == selectedColor;
-              return GestureDetector(
+          children: [
+            for (final color in colors)
+              GestureDetector(
                 onTap: () {
-                  ref.read(colorPickerProvider.notifier).select(color);
+                  ref
+                      .read(colorPickerProvider.notifier)
+                      .select(color, widget.item.id!);
                 },
                 child: AnimatedContainer(
                   margin: const EdgeInsets.only(top: 10),
@@ -36,7 +53,7 @@ class ColorPicker extends StatelessWidget {
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: isSelected
+                      color: color == selectedColor
                           ? Color(selectedColor!)
                           : Colors.transparent,
                       width: 2,
@@ -51,9 +68,8 @@ class ColorPicker extends StatelessWidget {
                     ),
                   ),
                 ),
-              );
-            },
-          ).toList(),
+              ),
+          ],
         );
       },
     );

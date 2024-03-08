@@ -7,22 +7,40 @@ class SizePicker extends StatelessWidget {
 
   /// The [Item] to display.
   final Item item;
+
+  /// The [Item] sizes.
+  List<String?> get sizes {
+    final sizes = <String?>[];
+    for (final size in item.sizes!) {
+      sizes.add(size.toString());
+    }
+    return sizes;
+  }
+
   @override
   Widget build(BuildContext context) {
-    late final sizes = item.sizes!.map((e) => e).toList();
     return Consumer(
       builder: (_, WidgetRef ref, __) {
-        ref.watch(sizePickerProvider);
-        final selectedSize =
-            ref.read(sizePickerProvider).pickedState ?? item.sizes!.first;
+        final selectedSize = ref.watch(
+          sizePickerProvider.select(
+            (value) {
+              if (value.itemID == item.id) {
+                return value.pickedState;
+              } else {
+                return null;
+              }
+            },
+          ),
+        );
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: sizes.map(
-            (size) {
-              final isSelected = size == selectedSize;
-              return GestureDetector(
+          children: [
+            for (final size in sizes)
+              GestureDetector(
                 onTap: () {
-                  ref.read(sizePickerProvider.notifier).select(size);
+                  ref
+                      .read(sizePickerProvider.notifier)
+                      .select(size.toString(), item.id!);
                 },
                 child: AnimatedContainer(
                   width: 40,
@@ -31,11 +49,11 @@ class SizePicker extends StatelessWidget {
                   duration: const Duration(milliseconds: 300),
                   padding: const EdgeInsets.all(3),
                   decoration: BoxDecoration(
-                    color: isSelected
+                    color: size == selectedSize
                         ? ColorConstants.seccoundaryColor
                         : Colors.transparent,
                     border: Border.all(
-                      color: isSelected
+                      color: size == selectedSize
                           ? ColorConstants.seccoundaryColor
                           : ColorConstants.seccoundaryColor.withOpacity(0.1),
                       width: 2,
@@ -43,20 +61,20 @@ class SizePicker extends StatelessWidget {
                   ),
                   child: Center(
                     child: OdinText(
-                      text: size as String,
+                      text: size.toString(),
                       type: OdinTextType.custom,
-                      textColor: isSelected
+                      textColor: size == selectedSize
                           ? ColorConstants.primaryColor
                           : ColorConstants.seccoundaryColor,
                       textSize: 14,
-                      textWeight:
-                          isSelected ? FontWeight.w600 : FontWeight.w400,
+                      textWeight: size == selectedSize
+                          ? FontWeight.w600
+                          : FontWeight.w400,
                     ),
                   ),
                 ),
-              );
-            },
-          ).toList(),
+              ),
+          ],
         );
       },
     );

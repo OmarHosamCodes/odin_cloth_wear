@@ -67,27 +67,21 @@ class CartScreen extends StatelessWidget {
                   return cartWatcher.maybeWhen(
                     data: (cart) {
                       if (cart.isEmpty) {
-                        return SizedBox.fromSize(
-                          size: const Size(50, 50),
-                          child: const OdinChip(
-                            label: FittedBox(
-                              child: OdinText(
-                                text: 'Continue Shopping',
-                                type: OdinTextType.subtitle,
-                              ),
+                        return OdinElevatedButton(
+                          child: const FittedBox(
+                            child: OdinText(
+                              text: 'Continue Shopping',
                             ),
                           ),
+                          onPressed: () => context.go(Routes.home),
                         );
                       }
                       return OdinElevatedButton(
                         child: const OdinText(text: 'Checkout'),
-                        onPressed: () {
-                          if (cart.isEmpty) {
-                            OdinToast.showErrorToast('Cart is empty');
-                          } else {
-                            OdinToast.showSuccessToast('Checkout');
-                          }
-                        },
+                        onPressed: () => context.pushNamed(
+                          Routes.checkoutRoot,
+                          extra: cart,
+                        ),
                       );
                     },
                     orElse: () => const SizedBox(),

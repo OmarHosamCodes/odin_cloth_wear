@@ -1,7 +1,7 @@
 import 'package:odin_cloth_wear/library.dart';
 
 /// A [StatelessWidget] that displays the item screen.
-class ItemScreen extends StatelessWidget {
+class ItemScreen extends ConsumerWidget {
   /// A [StatelessWidget] that displays the item screen.
   const ItemScreen({
     required this.id,
@@ -15,65 +15,31 @@ class ItemScreen extends StatelessWidget {
   /// The [Item] to display.
   final Item? cachedItem;
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final height = MediaQuery.of(context).size.height;
     return Scaffold(
       body: Consumer(
         builder: (_, WidgetRef ref, __) {
-          switch (cachedItem) {
-            case null:
-              final item = ref.read(itemProvider(id));
-              return item.maybeWhen(
-                // or else go to no page found
-                data: (item) {
-                  return CustomScrollView(
-                    slivers: [
-                      SliverToBoxAdapter(
-                        child: SizedBox(
-                          height: height,
-                          child: ImageViewer(
-                            item: item!,
-                            showDetails: false,
-                          ),
-                        ),
-                      ),
-                      SliverList(
-                        delegate: SliverChildListDelegate(
-                          [
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 5),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  TitleAndPricing(item: item),
-                                  const OdinDivider(),
-                                  ColorPicker(item: item),
-                                  SizePicker(item: item),
-                                  AddToCart(item: item),
-                                  Description(item: item),
-                                  Sizing(item),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  );
-                },
-
-                orElse: () => const SliverToBoxAdapter(child: OdinLoader()),
-              );
-            default:
+          final item = ref.watch(itemProvider(id));
+          return item.maybeWhen(
+            // or else go to no page found
+            data: (item) {
+              if (item == null) {
+                return const Center(
+                  child: OdinChip(
+                    label: OdinText(
+                      text: 'No item found',
+                    ),
+                  ),
+                );
+              }
               return CustomScrollView(
                 slivers: [
                   SliverToBoxAdapter(
                     child: SizedBox(
                       height: height,
                       child: ImageViewer(
-                        item: cachedItem!,
+                        item: item,
                         showDetails: false,
                       ),
                     ),
@@ -87,13 +53,14 @@ class ItemScreen extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              TitleAndPricing(item: cachedItem!),
+                              TitleAndPricing(item: item),
                               const OdinDivider(),
-                              ColorPicker(item: cachedItem!),
-                              SizePicker(item: cachedItem!),
-                              AddToCart(item: cachedItem!),
-                              Description(item: cachedItem!),
-                              Sizing(cachedItem!),
+                              ColorPicker(item: item),
+                              SizePicker(item: item),
+                              AddToCart(item: item),
+                              Description(item: item),
+                              Sizing(item),
+                              const OdinDivider(),
                             ],
                           ),
                         ),
@@ -102,7 +69,58 @@ class ItemScreen extends StatelessWidget {
                   ),
                 ],
               );
-          }
+            },
+
+            loading: () => SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    color: ColorConstants.seccoundaryColor,
+                    height: height,
+                    width: double.infinity,
+                  ),
+                  const SizedBox(height: 10),
+                  Container(
+                    color: ColorConstants.seccoundaryColor,
+                    height: 50,
+                    width: double.infinity,
+                  ),
+                  const SizedBox(height: 10),
+                  Container(
+                    color: ColorConstants.seccoundaryColor,
+                    height: 40,
+                    width: double.infinity,
+                  ),
+                  const SizedBox(height: 10),
+                  Container(
+                    color: ColorConstants.seccoundaryColor,
+                    height: 40,
+                    width: double.infinity,
+                  ),
+                  const SizedBox(height: 10),
+                  Container(
+                    color: ColorConstants.seccoundaryColor,
+                    height: 30,
+                    width: double.infinity,
+                  ),
+                  const SizedBox(height: 10),
+                  Container(
+                    color: ColorConstants.seccoundaryColor,
+                    height: 150,
+                    width: double.infinity,
+                  ),
+                  const SizedBox(height: 10),
+                  Container(
+                    color: ColorConstants.seccoundaryColor,
+                    height: 30,
+                    width: double.infinity,
+                  ),
+                ],
+              ),
+            ),
+            orElse: () => const OdinLoader(),
+          );
         },
       ),
     );

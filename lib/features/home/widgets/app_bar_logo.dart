@@ -23,24 +23,9 @@ class AppBarLogo extends StatelessWidget {
               ),
             );
           },
-          orElse: OdinLoader.new,
+          orElse: () => const OdinLoader(),
         );
       },
     );
   }
 }
-
-/// A [StatelessWidget] that displays the app bar logo.
-void openErrorDialog(BuildContext context, String error) => showDialog<void>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Error'),
-        content: Text(error),
-        actions: [
-          IconButton(
-            onPressed: () => Navigator.pop(context),
-            icon: const Icon(Icons.close),
-          ),
-        ],
-      ),
-    );

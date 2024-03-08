@@ -10,11 +10,13 @@ class Sizing extends StatelessWidget {
   /// The [Item] to display.
   final Item item;
 
-  /// The [DataRow]s to display.
+  /// Returns a list of [DataRow]s to display the sizing.
   List<DataRow> get getRows {
     final rows = <DataRow>[];
+    final sizingIterator = item.sizing!.iterator;
 
-    for (final sizing in item.sizing!) {
+    while (sizingIterator.moveNext()) {
+      final sizing = sizingIterator.current;
       sizing.forEach(
         (key, value) {
           rows.add(
@@ -30,6 +32,7 @@ class Sizing extends StatelessWidget {
         },
       );
     }
+
     return rows;
   }
 

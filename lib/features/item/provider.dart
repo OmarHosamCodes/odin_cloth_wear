@@ -19,7 +19,8 @@ final itemProvider = FutureProvider.family<Item?, String?>(
       return null;
     } else {
       final item = await ref.read(itemRepositoryProvider).getById(itemId);
-      return item.$1;
+
+      return item;
     }
   },
 );

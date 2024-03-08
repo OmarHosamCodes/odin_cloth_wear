@@ -22,20 +22,12 @@ class ItemRepository {
   CollectionReference get _itemsCollection => firestore.collection(collection);
 
   /// GET [Item] by id
-  Future<(Item?, ResponseStatus)> getById(String? itemId) async {
-    if (itemId == null) {
-      return (null, ResponseStatus.error);
-    } else {
-      final snapshot = await _itemsCollection.doc(itemId).get();
-      if (snapshot.exists) {
-        return (
-          Item.fromJson(snapshot.data()! as Map<String, dynamic>),
-          ResponseStatus.success
-        );
-      } else {
-        return (null, ResponseStatus.error);
-      }
+  Future<Item?> getById(String? itemId) async {
+    final snapshot = await _itemsCollection.doc(itemId).get();
+    if (snapshot.exists) {
+      return Item.fromJson(snapshot.data()! as Map<String, dynamic>);
     }
+    return null;
   }
 
   /// GET [Item]s by category
@@ -43,29 +35,39 @@ class ItemRepository {
     return _itemsCollection
         .where('category', isLessThanOrEqualTo: category)
         .get()
-        .then(
-          (value) => value.docs
-              .map((doc) => Item.fromJson(doc.data()! as Map<String, dynamic>))
-              .toList(),
-        );
+        .then((value) {
+      final items = <Item>[];
+      for (final doc in value.docs) {
+        items.add(Item.fromJson(doc.data()! as Map<String, dynamic>));
+      }
+      return items;
+    });
   }
 
   /// GET [Item]s by tag
   Future<List<Item>> getByTag(String tag) {
     return _itemsCollection.where('tags', arrayContains: tag).get().then(
-          (value) => value.docs
-              .map((doc) => Item.fromJson(doc.data()! as Map<String, dynamic>))
-              .toList(),
-        );
+      (value) {
+        final items = <Item>[];
+        for (final doc in value.docs) {
+          items.add(Item.fromJson(doc.data()! as Map<String, dynamic>));
+        }
+        return items;
+      },
+    );
   }
 
   /// GET [Item]s by name
   Future<List<Item>> getByName(String name) {
     return _itemsCollection.where('name', isLessThanOrEqualTo: name).get().then(
-          (value) => value.docs
-              .map((doc) => Item.fromJson(doc.data()! as Map<String, dynamic>))
-              .toList(),
-        );
+      (value) {
+        final items = <Item>[];
+        for (final doc in value.docs) {
+          items.add(Item.fromJson(doc.data()! as Map<String, dynamic>));
+        }
+        return items;
+      },
+    );
   }
 
   /// Get [Item]s by search query
@@ -83,12 +85,16 @@ class ItemRepository {
     return searchQuery.toList();
   }
 
-  /// GET [Item]s
+  /// GET Home [Item]s
   Future<List<Item>> get() {
-    return _itemsCollection.get().then(
-          (value) => value.docs
-              .map((doc) => Item.fromJson(doc.data()! as Map<String, dynamic>))
-              .toList(),
-        );
+    return _itemsCollection.limit(6).get().then(
+      (value) {
+        final items = <Item>[];
+        for (final doc in value.docs) {
+          items.add(Item.fromJson(doc.data()! as Map<String, dynamic>));
+        }
+        return items;
+      },
+    );
   }
 }

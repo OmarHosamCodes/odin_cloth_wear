@@ -16,15 +16,20 @@ class CartRepository {
   /// ADD [CartItem]
 
   Future<(CartItem?, ResponseStatus)> add(
-      String itemID, int color, String size,) async {
+    String itemID,
+    int color,
+    String size,
+  ) async {
     final box = await Hive.openBox<CartItem>('cart');
     final itemRepository = ItemRepository(FirebaseFirestore.instance);
-    final item = (await itemRepository.getById(itemID)).$1; //add null check
+    final item = await itemRepository.getById(itemID); //add null check
     if (item != null) {
       final cartItem = CartItem(
         id: item.id,
         color: color,
         size: size,
+        price: item.price,
+        name: item.name,
       );
       await box.put(item.id, cartItem);
       return (cartItem, ResponseStatus.success);
@@ -33,25 +38,29 @@ class CartRepository {
     }
   }
 
-  /// PUT [CartItem]
-  Future<(CartItem?, ResponseStatus)> update(CartItem cartItem) async {
+  /// INCREMENT [CartItem]
+  Future<void> increment(String id) async {
     final box = await Hive.openBox<CartItem>('cart');
-    if (box.get(cartItem.id) != null) {
-      await box.put(cartItem.id, cartItem);
-      return (cartItem, ResponseStatus.success);
-    } else {
-      return (null, ResponseStatus.error);
+    final cartItem = box.get(id);
+    if (cartItem != null) {
+      cartItem.quantity++;
+      await box.put(id, cartItem);
+    }
+  }
+
+  /// DECREMENT [CartItem]
+  Future<void> decrement(String id) async {
+    final box = await Hive.openBox<CartItem>('cart');
+    final cartItem = box.get(id);
+    if (cartItem!.quantity > 1) {
+      cartItem.quantity--;
+      await box.put(id, cartItem);
     }
   }
 
   /// DELETE [CartItem]
-  Future<ResponseStatus> delete(String id) async {
+  Future<void> delete(String id) async {
     final box = await Hive.openBox<CartItem>('cart');
     await box.delete(id);
-    if (box.get(id) != null) {
-      return ResponseStatus.error;
-    } else {
-      return ResponseStatus.success;
-    }
   }
 }

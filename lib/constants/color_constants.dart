@@ -12,4 +12,7 @@ class ColorConstants {
 
   /// The divider color.
   static const Color dividerColor = Color(0xB8D9DCDE);
+
+  /// The Overlay color.
+  static const Color overlayColor = Color(0x4D000000);
 }

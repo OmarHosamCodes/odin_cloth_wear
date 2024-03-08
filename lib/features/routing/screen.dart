@@ -1,3 +1,4 @@
+import 'package:odin_cloth_wear/features/routing/widgets/contact_info.dart';
 import 'package:odin_cloth_wear/library.dart';
 
 /// A [ConsumerWidget] that displays a [CartItem] in a [ListTile].
@@ -20,9 +21,7 @@ class RoutingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final advancedDrawerController = AdvancedDrawerController();
-    void handleMenuButtonPressed() {
-      advancedDrawerController.toggleDrawer();
-    }
+    void handleMenuButtonPressed() => advancedDrawerController.toggleDrawer();
 
     return AdvancedDrawer(
       backdrop: Container(
@@ -34,17 +33,17 @@ class RoutingScreen extends StatelessWidget {
       animationCurve: Curves.easeInOut,
       animationDuration: const Duration(milliseconds: 300),
       drawer: FutureBuilder(
-        future: Future<void>.delayed(const Duration(milliseconds: 500)),
+        future: Future<void>.delayed(const Duration(seconds: 2)),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const OdinLoader();
           }
-          return Align(
-            alignment: Alignment.topCenter,
-            child: ListView(
-              shrinkWrap: true,
-              children: [
-                Consumer(
+          return ListView(
+            shrinkWrap: true,
+            children: [
+              Align(
+                alignment: Alignment.topCenter,
+                child: Consumer(
                   builder: (_, WidgetRef ref, __) {
                     final assetsWatcher = ref.watch(assetsProvider);
                     return assetsWatcher.when(
@@ -65,153 +64,171 @@ class RoutingScreen extends StatelessWidget {
                     );
                   },
                 ),
-                ListTile(
-                  onTap: () => context.go(Routes.home),
-                  leading: const Icon(
-                    EvaIcons.home,
-                    color: ColorConstants.primaryColor,
-                  ),
-                  title: const OdinText(text: 'Home'),
+              ),
+              ListTile(
+                onTap: () => context.go(Routes.home),
+                leading: const Icon(
+                  EvaIcons.home,
+                  color: ColorConstants.primaryColor,
                 ),
-                Consumer(
-                  builder: (_, WidgetRef ref, __) {
-                    final assetsWatcher = ref.watch(assetsProvider);
-                    final categories = assetsWatcher.maybeWhen(
-                      data: (assets) {
-                        final categories = List<Category>.from(
-                          assets.categories
-                              .map(
-                                (category) => Category.fromJson(
-                                  category as Map<String, dynamic>,
-                                ),
-                              )
-                              .toList(),
-                        );
+                title: const OdinText(text: 'Home'),
+              ),
+              Consumer(
+                builder: (_, WidgetRef ref, __) {
+                  final assetsWatcher = ref.watch(assetsProvider);
+                  final categories = assetsWatcher.maybeWhen(
+                    data: (assets) {
+                      final categories = List<Category>.from(
+                        assets.categories
+                            .map(
+                              (category) => Category.fromJson(
+                                category as Map<String, dynamic>,
+                              ),
+                            )
+                            .toList(),
+                      );
 
-                        return categories;
-                      },
-                      orElse: () => [
-                        Category('loading', ['...', '...']),
-                      ],
-                    );
-                    final categoryList = <Widget>[];
-                    for (final e in categories) {
-                      categoryList.add(
-                        ListTile(
-                          shape: noBorder,
-                          title: OdinText(text: e.name ?? 'loading'),
-                          onTap: () {
-                            context.goNamed(
-                              Routes.searchRoot,
-                              queryParameters: {
-                                'query': e.name,
-                                'type': SearchTypeConstants.category,
-                              },
-                            );
+                      return categories;
+                    },
+                    orElse: () => [
+                      Category('loading', ['...', '...']),
+                    ],
+                  );
+                  final categoryList = <Widget>[];
+                  for (final e in categories) {
+                    categoryList.add(
+                      ListTile(
+                        shape: noBorder,
+                        title: OdinText(text: e.name ?? 'loading'),
+                        onTap: () => context.goNamed(
+                          Routes.searchRoot,
+                          queryParameters: {
+                            'query': e.name,
+                            'type': SearchTypeConstants.category,
                           },
                         ),
-                      );
-                    }
-                    return ExpansionTile(
-                      childrenPadding: const EdgeInsets.only(left: 16),
-                      collapsedIconColor: ColorConstants.primaryColor,
-                      leading: const Icon(
-                        EvaIcons.funnel,
-                        color: ColorConstants.primaryColor,
                       ),
-                      title: const OdinText(text: 'Categories'),
-                      shape: noBorder,
-                      children: categoryList,
+                    );
+                  }
+                  return ExpansionTile(
+                    childrenPadding: const EdgeInsets.only(left: 16),
+                    collapsedIconColor: ColorConstants.primaryColor,
+                    leading: const Icon(
+                      EvaIcons.funnel,
+                      color: ColorConstants.primaryColor,
+                    ),
+                    title: const OdinText(text: 'Categories'),
+                    shape: noBorder,
+                    children: categoryList,
+                  );
+                },
+              ),
+              const ListTile(
+                leading: Icon(
+                  EvaIcons.flash,
+                  color: Color(0xFFFFD740),
+                ),
+                title: OdinText(text: 'Hot Now'),
+              ),
+              SizedBox(
+                height: 100,
+                width: double.infinity,
+                child: Consumer(
+                  builder: (_, WidgetRef ref, __) {
+                    final itemsByTags =
+                        ref.watch(filteredItemsByTagProvider('hot'));
+                    return itemsByTags.maybeWhen(
+                      data: (items) {
+                        final controller = ScrollController();
+
+                        return GestureDetector(
+                          onPanUpdate: (details) {
+                            if (details.delta.dx > 0) {
+                              controller.jumpTo(controller.offset - 5);
+                            } else if (details.delta.dx < 0) {
+                              controller.jumpTo(controller.offset + 5);
+                            }
+                          },
+                          child: ListView.separated(
+                            padding: const EdgeInsets.only(left: 20),
+                            controller: controller,
+                            shrinkWrap: true,
+                            scrollDirection: Axis.horizontal,
+                            itemCount: items.length,
+                            separatorBuilder: (context, index) {
+                              return const Row(
+                                children: [
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  SizedBox(
+                                    height: 30,
+                                    child: VerticalDivider(
+                                      thickness: .5,
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                ],
+                              );
+                            },
+                            itemBuilder: (context, index) {
+                              final item = items[index];
+                              return InkWell(
+                                onTap: () => context.pushNamed(
+                                  Routes.itemRoot,
+                                  pathParameters: {
+                                    'id': item.id!,
+                                  },
+                                  extra: item,
+                                ),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(3),
+                                  child: AspectRatio(
+                                    aspectRatio: 2 / 3,
+                                    child: OdinImageNetwork(
+                                      source: item.images!.first.toString(),
+                                      height: 100,
+                                      width: 100,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      },
+                      orElse: () => const OdinLoader(),
                     );
                   },
                 ),
-                ListTile(
-                  onTap: () {},
-                  leading: const Icon(
-                    EvaIcons.flash,
-                    color: Color(0xFFFFD740),
-                  ),
-                  title: const OdinText(text: 'Hot Now'),
+              ),
+              const ListTile(
+                leading: Icon(
+                  EvaIcons.messageSquare,
+                  color: ColorConstants.primaryColor,
                 ),
-                SizedBox(
-                  height: 100,
-                  width: double.infinity,
-                  child: Consumer(
-                    builder: (_, WidgetRef ref, __) {
-                      final itemsByTags =
-                          ref.watch(filteredItemsByTagProvider('hot'));
-                      return itemsByTags.maybeWhen(
-                        data: (items) {
-                          final controller = ScrollController();
-
-                          return GestureDetector(
-                            onPanUpdate: (details) {
-                              if (details.delta.dx > 0) {
-                                controller.jumpTo(controller.offset - 5);
-                              } else if (details.delta.dx < 0) {
-                                controller.jumpTo(controller.offset + 5);
-                              }
-                            },
-                            child: ListView.separated(
-                              padding: const EdgeInsets.only(left: 20),
-                              controller: controller,
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              itemCount: items.length,
-                              separatorBuilder: (context, index) {
-                                return const Row(
-                                  children: [
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    SizedBox(
-                                      height: 30,
-                                      child: VerticalDivider(
-                                        thickness: .5,
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                  ],
-                                );
-                              },
-                              itemBuilder: (context, index) {
-                                final item = items[index];
-                                return InkWell(
-                                  onTap: () {
-                                    context.pushNamed(
-                                      Routes.itemRoot,
-                                      pathParameters: {
-                                        'id': item.id!,
-                                      },
-                                      extra: item,
-                                    );
-                                  },
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(3),
-                                    child: AspectRatio(
-                                      aspectRatio: 2 / 3,
-                                      child: OdinImageNetwork(
-                                        source: item.images!.first.toString(),
-                                        height: 100,
-                                        width: 100,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                          );
-                        },
-                        orElse: () => const OdinLoader(),
-                      );
-                    },
-                  ),
+                title: OdinText(
+                  text: 'Contact',
                 ),
-              ],
-            ),
+              ),
+              Align(
+                alignment: Alignment.topLeft,
+                child: Consumer(
+                  builder: (_, WidgetRef ref, __) {
+                    final assetsWatcher = ref.watch(assetsProvider);
+                    return assetsWatcher.maybeWhen(
+                      data: (assets) {
+                        return ContactInfoForDrawer(assets: assets);
+                      },
+                      orElse: () => const OdinLoader(),
+                    );
+                  },
+                ),
+              ),
+            ],
           );
         },
       ),
@@ -266,7 +283,7 @@ class RoutingScreen extends StatelessWidget {
                 onSubmitted: (query) {
                   context.goNamed(
                     Routes.searchRoot,
-                    queryParameters: {
+                    queryParameters: <String, dynamic>{
                       'query': query,
                       'type': SearchTypeConstants.query,
                     },

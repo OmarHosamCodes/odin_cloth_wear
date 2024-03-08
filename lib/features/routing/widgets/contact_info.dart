@@ -3,9 +3,9 @@
 import 'package:odin_cloth_wear/library.dart';
 
 /// A [StatelessWidget] that displays the contact info of the admin.
-class ContactInfo extends StatelessWidget {
+class ContactInfoForDrawer extends StatelessWidget {
   /// A [StatelessWidget] that displays the contact info of the admin.
-  const ContactInfo({required this.assets, super.key});
+  const ContactInfoForDrawer({required this.assets, super.key});
 
   /// The [Assets] to display.
   final Assets assets;
@@ -32,21 +32,12 @@ class ContactInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: width * .2, vertical: 16),
-      color: ColorConstants.seccoundaryColor,
+    return Padding(
+      padding: const EdgeInsets.only(left: 20, top: 10, bottom: 20),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const OdinText(
-            text: 'Contact',
-            type: OdinTextType.custom,
-            textSize: 20,
-            textColor: ColorConstants.primaryColor,
-            textWeight: FontWeight.bold,
-          ),
-          const Gap(),
           InkWell(
             onTap: () => context.pushNamed(
               Routes.contactRoot,
@@ -91,22 +82,19 @@ class ContactInfo extends StatelessWidget {
             ),
           ),
           const Gap(),
-          Row(
+          const Row(
+            mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              SizedBox(
-                width: width * .2,
-                child: const OdinDivider(
-                  thickness: 2,
-                ),
-              ),
-              const OdinText(
+              OdinText(
                 text: 'Social Media',
                 type: OdinTextType.subtitle,
               ),
               SizedBox(
-                width: width * .2,
-                child: const OdinDivider(
+                width: 10,
+              ),
+              Expanded(
+                child: OdinDivider(
                   thickness: 2,
                 ),
               ),
@@ -114,7 +102,7 @@ class ContactInfo extends StatelessWidget {
           ),
           const Gap(),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: _socials,
           ),
         ],
