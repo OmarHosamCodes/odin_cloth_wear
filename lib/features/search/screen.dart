@@ -56,7 +56,7 @@ class SearchScreen extends StatelessWidget {
         builder: (_, WidgetRef ref, __) {
           AsyncValue<List<Item>> asyncItemsWatcher() => switch (type) {
                 SearchTypeConstants.category =>
-                  ref.watch(filteredItemsByCategoryProvider(query)),
+                  ref.watch(filteredItemsByCategoryProvider((query, 100))),
                 SearchTypeConstants.tag =>
                   ref.watch(filteredItemsByTagProvider(query)),
                 SearchTypeConstants.name =>

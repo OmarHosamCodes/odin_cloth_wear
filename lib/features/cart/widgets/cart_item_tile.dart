@@ -23,7 +23,7 @@ class CartItemTile extends ConsumerWidget {
         return ListTile(
           leading: AspectRatio(
             aspectRatio: .8,
-            child: OdinImageNetwork(
+            child: OdinImage(
               source: item!.images!.first.toString(),
               fit: BoxFit.fitHeight,
             ),

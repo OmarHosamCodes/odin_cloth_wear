@@ -8,6 +8,7 @@ class Assets {
     required this.categories,
     required this.social,
     required this.coupons,
+    required this.order,
   });
 
   /// Creates an [Assets] from a json
@@ -17,6 +18,7 @@ class Assets {
       social: json[socialKey] as Map<String, dynamic>,
       categories: json[categoriesKey] as List,
       coupons: json[couponsKey] as List,
+      order: json[orderKey] as num,
     );
   }
 
@@ -27,6 +29,7 @@ class Assets {
           social: {},
           categories: [],
           coupons: [],
+          order: 0,
         );
 
   /// The key for the logo
@@ -41,6 +44,9 @@ class Assets {
   /// The key for the coupons
   static const String couponsKey = 'coupons';
 
+  /// The key for the order
+  static const String orderKey = 'order';
+
   /// The logo
   final String logo;
 
@@ -53,11 +59,17 @@ class Assets {
   /// The coupons
   final List coupons;
 
+  /// The order
+  final num order;
+
   /// Converts the [Assets] to a json
   Map<String, dynamic> toJson() {
     return {
       logoKey: logo,
       socialKey: social,
+      categoriesKey: categories,
+      couponsKey: coupons,
+      orderKey: order,
     };
   }
 
@@ -67,12 +79,14 @@ class Assets {
     List? categories,
     Map<String, dynamic>? social,
     List? coupons,
+    int? order,
   }) {
     return Assets(
       logo: logo ?? this.logo,
       social: social ?? this.social,
       categories: categories ?? this.categories,
       coupons: coupons ?? this.coupons,
+      order: order ?? this.order,
     );
   }
 }

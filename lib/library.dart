@@ -10,6 +10,7 @@ export 'features/404/screen.dart';
 export 'features/search/screen.dart';
 export 'features/contact/screen.dart';
 export 'features/checkout/screen.dart';
+export 'features/shop/screen.dart';
 
 //* Widgets
 
@@ -24,6 +25,7 @@ export 'features/widgets/odin_text_field.dart';
 export 'features/home/widgets/image_viewer.dart';
 export 'features/home/widgets/app_bar_logo.dart';
 export 'features/home/widgets/image_randomizer_showcase.dart';
+export 'features/home/widgets/items_list.dart';
 export 'features/routing/screen.dart';
 export 'features/home/widgets/contact_info.dart';
 export 'features/item/widgets/add_to_cart.dart';
@@ -34,7 +36,6 @@ export 'features/item/widgets/title_and_pricing.dart';
 export 'features/item/widgets/description.dart';
 export 'features/cart/widgets/cart_item_tile.dart';
 export 'features/cart/widgets/quick_add_sheet.dart';
-export 'features/home/widgets/items_list.dart';
 export 'features/checkout/widgets/receipt.dart';
 export 'features/checkout/widgets/governorate_dropdown.dart';
 
@@ -70,6 +71,7 @@ export 'features/assets/model.dart';
 export 'features/cart/model.dart';
 export 'features/home/model.dart';
 export 'features/checkout/model.dart';
+export 'features/checkout/widgets/model.dart';
 
 //* Constants
 
@@ -114,3 +116,4 @@ export 'package:expandable/expandable.dart';
 export 'package:fluttertoast/fluttertoast.dart'
     show Fluttertoast, Toast, ToastGravity;
 export 'package:flutter_markdown/flutter_markdown.dart';
+export 'package:uuid/uuid.dart';

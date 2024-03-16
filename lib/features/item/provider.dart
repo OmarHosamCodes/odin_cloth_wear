@@ -35,10 +35,11 @@ final itemsProvider = FutureProvider<List<Item>>(
 
 /// Provider for a list of [Item] instances filtered by category.
 final filteredItemsByCategoryProvider =
-    FutureProvider.family<List<Item>, String>(
+    FutureProvider.family<List<Item>, (String, int?)>(
   (ref, category) async {
-    final items =
-        await ref.read(itemRepositoryProvider).getByCategory(category);
+    final items = await ref
+        .read(itemRepositoryProvider)
+        .getByCategory(category.$1, category.$2);
     return items;
   },
 );

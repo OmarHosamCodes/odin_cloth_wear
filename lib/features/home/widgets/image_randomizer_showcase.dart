@@ -26,7 +26,7 @@ class ImageRandomizerShowcase extends StatelessWidget {
                   color: ColorConstants.overlayColor,
                   child: Center(
                     child: InkWell(
-                      onTap: () {},
+                      onTap: () => context.goNamed(Routes.shopRoot),
                       child: Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 20,
@@ -127,7 +127,7 @@ class LoopingPageViewState extends State<LoopingPageView> {
       itemCount: widget.items.length,
       itemBuilder: (context, index) {
         final item = widget.items[index];
-        return OdinImageNetwork(
+        return OdinImage(
           source: item.images!.first.toString(),
           fit: BoxFit.cover,
         );

@@ -4,7 +4,7 @@ import 'package:odin_cloth_wear/library.dart';
 class RoutingRepository {
   /// [router].
   static final router = GoRouter(
-    initialLocation: Routes.home,
+    initialLocation: Routes.shop,
     routes: [
       ShellRoute(
         builder: (context, state, child) => RoutingScreen(child: child),
@@ -42,6 +42,11 @@ class RoutingRepository {
             builder: (context, state) => CheckoutScreen(
               cart: state.extra! as List<CartItem>,
             ),
+          ),
+          GoRoute(
+            name: Routes.shopRoot,
+            path: Routes.shop,
+            builder: (context, state) => const ShopScreen(),
           ),
         ],
       ),

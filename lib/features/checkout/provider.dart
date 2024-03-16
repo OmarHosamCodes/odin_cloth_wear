@@ -13,7 +13,7 @@ class MailStateNotifier extends StateNotifier<Mail> {
   MailStateNotifier(super.state);
 
   /// Set the [governorate]
-  void setGovernorate(String governorate) =>
+  void setGovernorate(Governorate governorate) =>
       state = state.copyWith(governorates: governorate);
 
   /// Set the [name]
@@ -44,7 +44,7 @@ final mailStateNotifierProvider =
       name: '',
       phoneNumber: '',
       address: '',
-      governorates: 'Choose a governorate',
+      governorates: GovernoratesConstants.governorates[0],
     ),
   ),
 );

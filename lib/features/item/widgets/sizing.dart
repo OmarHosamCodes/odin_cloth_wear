@@ -74,7 +74,7 @@ class Sizing extends StatelessWidget {
               final assetsWatcher = ref.watch(assetsProvider);
               return assetsWatcher.when(
                 data: (assets) {
-                  return OdinImageNetwork(
+                  return OdinImage(
                     width: 60,
                     height: 60,
                     source: assets.logo,

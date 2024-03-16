@@ -27,9 +27,11 @@ class Receipt extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final mail = ref.watch(mailStateNotifierProvider);
-    final total = mail.total;
-    final items = mail.items;
+    final state = ref.watch(mailStateNotifierProvider);
+    final total = state.total;
+    final items = state.items;
+    final discount = state.discount;
+    final governorate = state.governorates;
 
     //?
     Future<void> capturePng() async {
@@ -110,22 +112,74 @@ class Receipt extends ConsumerWidget {
               SliverToBoxAdapter(
                 child: Padding(
                   padding: const EdgeInsets.all(8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child: Column(
                     children: [
-                      const OdinText(
-                        text: 'Total:',
-                        type: OdinTextType.custom,
-                        textColor: ColorConstants.primaryColor,
-                        textSize: 20,
-                        textWeight: FontWeight.bold,
+                      ListTile(
+                        title: const OdinText(
+                          text: 'Items:',
+                          type: OdinTextType.custom,
+                          textColor: ColorConstants.primaryColor,
+                          textSize: 16,
+                          textWeight: FontWeight.bold,
+                        ),
+                        trailing: OdinText(
+                          text: '${state.itemsTotal} EPG',
+                          type: OdinTextType.custom,
+                          textColor: ColorConstants.primaryColor,
+                          textSize: 16,
+                          textWeight: FontWeight.bold,
+                        ),
                       ),
-                      OdinText(
-                        text: '$total EPG',
-                        type: OdinTextType.custom,
-                        textColor: ColorConstants.primaryColor,
-                        textSize: 20,
-                        textWeight: FontWeight.bold,
+                      ListTile(
+                        title: const OdinText(
+                          text: 'Estimated Delivery:',
+                          type: OdinTextType.custom,
+                          textColor: ColorConstants.primaryColor,
+                          textSize: 16,
+                          textWeight: FontWeight.bold,
+                        ),
+                        trailing: OdinText(
+                          text: '${governorate.deliveryCost} EPG',
+                          type: OdinTextType.custom,
+                          textColor: ColorConstants.primaryColor,
+                          textSize: 16,
+                          textWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Visibility(
+                        visible: discount != null,
+                        child: ListTile(
+                          title: const OdinText(
+                            text: 'Discount:',
+                            type: OdinTextType.custom,
+                            textColor: ColorConstants.primaryColor,
+                            textSize: 16,
+                            textWeight: FontWeight.bold,
+                          ),
+                          trailing: OdinText(
+                            text: '$discount%',
+                            type: OdinTextType.custom,
+                            textColor: ColorConstants.primaryColor,
+                            textSize: 16,
+                            textWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      ListTile(
+                        title: const OdinText(
+                          text: 'Total:',
+                          type: OdinTextType.custom,
+                          textColor: ColorConstants.primaryColor,
+                          textSize: 16,
+                          textWeight: FontWeight.bold,
+                        ),
+                        trailing: OdinText(
+                          text: '$total EPG',
+                          type: OdinTextType.custom,
+                          textColor: ColorConstants.primaryColor,
+                          textSize: 16,
+                          textWeight: FontWeight.bold,
+                        ),
                       ),
                     ],
                   ),

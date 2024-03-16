@@ -30,6 +30,7 @@ dependencies:
   shimmer: ^3.0.0
   widgets_to_image: ^0.0.2
   web_image_downloader: ^1.0.1
+  uuid: ^4.3.3
 dev_dependencies:
   animated_native_splash:
     git:

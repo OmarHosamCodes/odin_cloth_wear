@@ -16,7 +16,7 @@ class AppBarLogo extends StatelessWidget {
           data: (assets) {
             return InkWell(
               onTap: () => context.go(Routes.home),
-              child: OdinImageNetwork(
+              child: OdinImage(
                 width: 95,
                 height: 95,
                 source: assets.logo,

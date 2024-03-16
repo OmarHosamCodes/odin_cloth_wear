@@ -18,19 +18,25 @@ class CheckoutRepository {
     required List<CartItem> items,
     required String userName,
     required String phoneNumber,
-    required String id,
     required String address,
-    required String governorates,
+    required Governorate governorates,
     required BuildContext context,
   }) async {
+    final docId = const Uuid().v8();
     final mail = Mail(
       items: items,
       name: userName,
       phoneNumber: phoneNumber,
-      id: id,
+      id: 'id',
       address: address,
       governorates: governorates,
+      docId: docId,
+    ).copyWith(
+      id: await AssetsRepository().get().then((value) {
+        return value.order.toString();
+      }),
     );
+    await AssetsRepository().putOrder();
 
     try {
       await instance._mailCollection.add(mail.toJson());

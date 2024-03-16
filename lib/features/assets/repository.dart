@@ -23,4 +23,11 @@ class AssetsRepository {
     });
     return assets;
   }
+
+  /// PUT [Assets]'s order
+  Future<void> putOrder() {
+    return _assetsCollection.update({
+      Assets.orderKey: FieldValue.increment(1),
+    });
+  }
 }

@@ -12,9 +12,9 @@ class GovernorateDropdown extends ConsumerWidget {
     for (final e in GovernoratesConstants.governorates) {
       dropdownItems.add(
         DropdownMenuItem(
-          value: e,
+          value: e.name ?? 'name',
           child: OdinText(
-            text: e,
+            text: e.name ?? 'name',
           ),
         ),
       );
@@ -45,19 +45,21 @@ class GovernorateDropdown extends ConsumerWidget {
             isExpanded: true,
             items: dropdownItems,
             onChanged: (value) {
+              final governorate = GovernoratesConstants.governorates
+                  .firstWhere((element) => element.name == value!);
               ref
                   .read(
                     mailStateNotifierProvider.notifier,
                   )
-                  .setGovernorate(value.toString());
+                  .setGovernorate(governorate);
             },
             hint: OdinText(
-              text: governorate,
+              text: governorate.name!,
             ),
           ),
         ),
         Visibility(
-          visible: governorate == 'Choose a governorate',
+          visible: governorate == Governorate(),
           child: const Padding(
             padding: EdgeInsets.all(8),
             child: OdinText(

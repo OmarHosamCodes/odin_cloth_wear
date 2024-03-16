@@ -38,4 +38,10 @@ class Routes {
 
   /// The route for the contact screen.
   static const String contact = '/contact';
+
+  /// The root route for the shop screen.
+  static const String shopRoot = 'shop';
+
+  /// The route for the shop screen.
+  static const String shop = '/shop';
 }

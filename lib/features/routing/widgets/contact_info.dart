@@ -16,7 +16,7 @@ class ContactInfoForDrawer extends StatelessWidget {
       socials.add(
         InkWell(
           onTap: () => launchURL(social.value[1] as String),
-          child: OdinImageNetwork(
+          child: OdinImage(
             source: social.value[0] as String,
             width: 26,
             height: 26,

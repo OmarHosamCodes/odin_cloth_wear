@@ -83,11 +83,11 @@ class CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                         hintText: 'Enter your name',
                         textInputAction: TextInputAction.next,
                         keyboardType: TextInputType.name,
-                        onChanged: (_) {
-                          ref.read(mailStateNotifierProvider.notifier).setName(
-                                nameController.text,
-                              );
-                        },
+                        onChanged: (_) => ref
+                            .read(mailStateNotifierProvider.notifier)
+                            .setName(
+                              nameController.text,
+                            ),
                         validator: validator,
                         inputFormatters: [
                           FilteringTextInputFormatter.singleLineFormatter,
@@ -97,45 +97,39 @@ class CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                   ),
                   const SizedBox(height: 20),
                   Consumer(
-                    builder: (_, WidgetRef ref, __) {
-                      return OdinTextField(
-                        controller: phoneController,
-                        hintText: 'Enter your phone number',
-                        textInputAction: TextInputAction.next,
-                        keyboardType: TextInputType.phone,
-                        onChanged: (_) {
-                          ref
-                              .read(mailStateNotifierProvider.notifier)
-                              .setPhoneNumber(
-                                phoneController.text,
-                              );
-                        },
-                        validator: validator,
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                          LengthLimitingTextInputFormatter(11),
-                        ],
-                      );
-                    },
+                    builder: (_, WidgetRef ref, __) => OdinTextField(
+                      controller: phoneController,
+                      hintText: 'Enter your phone number',
+                      textInputAction: TextInputAction.next,
+                      keyboardType: TextInputType.phone,
+                      onChanged: (_) {
+                        ref
+                            .read(mailStateNotifierProvider.notifier)
+                            .setPhoneNumber(
+                              phoneController.text,
+                            );
+                      },
+                      validator: validator,
+                      inputFormatters: [
+                        FilteringTextInputFormatter.digitsOnly,
+                        LengthLimitingTextInputFormatter(11),
+                      ],
+                    ),
                   ),
                   const SizedBox(height: 20),
                   Consumer(
-                    builder: (_, WidgetRef ref, __) {
-                      return OdinTextField(
-                        controller: addressController,
-                        hintText: 'Enter your address',
-                        textInputAction: TextInputAction.next,
-                        keyboardType: TextInputType.streetAddress,
-                        onChanged: (_) {
-                          ref
-                              .read(mailStateNotifierProvider.notifier)
-                              .setAddress(
-                                addressController.text,
-                              );
-                        },
-                        validator: validator,
-                      );
-                    },
+                    builder: (_, WidgetRef ref, __) => OdinTextField(
+                      controller: addressController,
+                      hintText: 'Enter your address',
+                      textInputAction: TextInputAction.next,
+                      keyboardType: TextInputType.streetAddress,
+                      onChanged: (_) => ref
+                          .read(mailStateNotifierProvider.notifier)
+                          .setAddress(
+                            addressController.text,
+                          ),
+                      validator: validator,
+                    ),
                   ),
                   const SizedBox(height: 20),
                   const GovernorateDropdown(),
@@ -162,7 +156,6 @@ class CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                     items: widget.cart,
                                     userName: state.name,
                                     phoneNumber: state.phoneNumber,
-                                    id: '0',
                                     address: state.address,
                                     governorates: state.governorates,
                                     context: context,
@@ -180,12 +173,10 @@ class CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                 .select((value) => value.total),
                           );
 
-                          return Row(
-                            children: [
-                              OdinText(
-                                text: 'Total: $total EGP',
-                              ),
-                            ],
+                          return OdinChip(
+                            label: OdinText(
+                              text: 'Total: $total EGP',
+                            ),
                           );
                         },
                       ),

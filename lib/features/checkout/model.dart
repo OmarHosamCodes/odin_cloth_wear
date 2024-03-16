@@ -11,6 +11,7 @@ class Mail {
     required this.phoneNumber,
     required this.address,
     required this.governorates,
+    this.docId,
     this.discount,
   });
 
@@ -24,7 +25,8 @@ class Mail {
       name: json['name'] as String,
       phoneNumber: json['phoneNumber'] as String,
       address: json['address'] as String,
-      governorates: json['governorates'] as String,
+      governorates: json['governorates'] as Governorate,
+      docId: json['docId'] as String?,
     );
   }
 
@@ -44,44 +46,59 @@ class Mail {
   final String address;
 
   /// [Mail] governorates
-  final String governorates;
+  final Governorate governorates;
 
-  /// [Mail] Discount
+  /// [Mail] doc ic
+  String? docId;
+
+  /// [Mail] discount
   double? discount;
 
-  /// [Mail] Total
-
+  /// [Mail] total
   double get total {
     final total = items.fold<double>(
       0,
       (previousValue, element) =>
           previousValue + (element.price! * element.quantity),
     );
+    final deliveryCost = governorates.deliveryCost ?? 0.0;
 
     return switch (discount) {
-      5 => total * .95,
-      10 => total * .90,
-      15 => total * .85,
-      20 => total * .80,
-      25 => total * .75,
-      30 => total * .70,
-      35 => total * .65,
-      40 => total * .60,
-      45 => total * .55,
-      50 => total * .50,
-      55 => total * .45,
-      60 => total * .40,
-      65 => total * .35,
-      70 => total * .30,
-      75 => total * .25,
-      80 => total * .20,
-      85 => total * .15,
-      90 => total * .10,
-      95 => total * .5,
-      100 => 0,
-      _ => total,
+      5 => (total * .95) + deliveryCost,
+      10 => (total * .90) + deliveryCost,
+      15 => (total * .85) + deliveryCost,
+      20 => (total * .80) + deliveryCost,
+      25 => (total * .75) + deliveryCost,
+      30 => (total * .70) + deliveryCost,
+      35 => (total * .65) + deliveryCost,
+      40 => (total * .60) + deliveryCost,
+      45 => (total * .55) + deliveryCost,
+      50 => (total * .50) + deliveryCost,
+      55 => (total * .45) + deliveryCost,
+      60 => (total * .40) + deliveryCost,
+      65 => (total * .35) + deliveryCost,
+      70 => (total * .30) + deliveryCost,
+      75 => (total * .25) + deliveryCost,
+      80 => (total * .20) + deliveryCost,
+      85 => (total * .15) + deliveryCost,
+      90 => (total * .10) + deliveryCost,
+      95 => (total * .5) + deliveryCost,
+      100 => 0 + deliveryCost,
+      _ => total + deliveryCost,
     }
         .roundToDouble();
+  }
+
+  /// [Mail] items total
+  double get itemsTotal {
+    final total = items
+        .fold<double>(
+          0,
+          (previousValue, element) =>
+              previousValue + (element.price! * element.quantity),
+        )
+        .roundToDouble();
+    return total;
   }
 
   /// [Mail] to json
@@ -92,8 +109,9 @@ class Mail {
       'name': name,
       'phoneNumber': phoneNumber,
       'address': address,
-      'governorates': governorates,
+      'governorates': governorates.name,
       'total': total,
+      'docId': docId,
     };
   }
 
@@ -104,7 +122,7 @@ class Mail {
     String? name,
     String? phoneNumber,
     String? address,
-    String? governorates,
+    Governorate? governorates,
     double? discount,
   }) {
     return Mail(

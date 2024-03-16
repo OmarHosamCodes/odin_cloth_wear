@@ -48,7 +48,7 @@ class RoutingScreen extends StatelessWidget {
                     final assetsWatcher = ref.watch(assetsProvider);
                     return assetsWatcher.when(
                       data: (assets) {
-                        return OdinImageNetwork(
+                        return OdinImage(
                           source: assets.logo,
                           height: 128,
                           width: 128,
@@ -187,7 +187,7 @@ class RoutingScreen extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(3),
                                   child: AspectRatio(
                                     aspectRatio: 2 / 3,
-                                    child: OdinImageNetwork(
+                                    child: OdinImage(
                                       source: item.images!.first.toString(),
                                       height: 100,
                                       width: 100,

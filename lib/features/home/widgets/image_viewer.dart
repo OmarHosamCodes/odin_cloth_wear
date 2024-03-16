@@ -58,7 +58,7 @@ class ImageViewer extends StatelessWidget {
                 },
                 extra: item,
               ),
-              child: OdinImageNetwork(
+              child: OdinImage(
                 source: item.images![index].toString(),
                 fit: BoxFit.cover,
               ),

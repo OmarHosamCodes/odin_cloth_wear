@@ -31,9 +31,10 @@ class ItemRepository {
   }
 
   /// GET [Item]s by category
-  Future<List<Item>> getByCategory(String category) {
+  Future<List<Item>> getByCategory(String category, int? limit) {
     return _itemsCollection
-        .where('category', isLessThanOrEqualTo: category)
+        .where('category', isGreaterThanOrEqualTo: category)
+        .limit(limit ?? 5)
         .get()
         .then((value) {
       final items = <Item>[];
@@ -59,7 +60,10 @@ class ItemRepository {
 
   /// GET [Item]s by name
   Future<List<Item>> getByName(String name) {
-    return _itemsCollection.where('name', isLessThanOrEqualTo: name).get().then(
+    return _itemsCollection
+        .where('name', isGreaterThanOrEqualTo: name)
+        .get()
+        .then(
       (value) {
         final items = <Item>[];
         for (final doc in value.docs) {
@@ -75,7 +79,7 @@ class ItemRepository {
     final searchQuery = <Item>{};
     final tagsQuery = await getByTag(query);
     final nameQuery = await getByName(query);
-    final categoryQuery = await getByCategory(query);
+    final categoryQuery = await getByCategory(query, 100);
 
     searchQuery
       ..addAll(tagsQuery)
